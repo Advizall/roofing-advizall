@@ -40,8 +40,8 @@ const Navbar = () => {
             <img 
               src="/lovable-uploads/4811a69a-c3ba-4318-bb8c-d90d22539145.png" 
               alt="PACC Solutions LLC" 
-              className="h-[38.4px]" 
-              style={{ height: "38.4px" }}
+              className="h-[76.8px]" 
+              style={{ height: "76.8px" }}
             />
           </a>
           
