@@ -6,10 +6,10 @@ const Hero = () => {
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-navy-500/80 z-10"></div>
+        <div className="absolute inset-0 bg-navy-500/70 z-10"></div>
         <img 
-          src="/american-roof-repair.jpg" 
-          alt="American home roof repair" 
+          src="/lovable-uploads/6cec3c84-d369-4d4c-b995-ee519e7d2c9a.png" 
+          alt="American home with stylish roof" 
           className="w-full h-full object-cover object-center"
         />
       </div>
