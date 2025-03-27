@@ -169,27 +169,27 @@ const Contact = () => {
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex items-center">
                   <div className="h-2 w-2 rounded-full bg-gold mr-2"></div>
-                  <span className="text-white/80">Minneapolis</span>
+                  <span className="text-white/80">Cook County</span>
                 </div>
                 <div className="flex items-center">
                   <div className="h-2 w-2 rounded-full bg-gold mr-2"></div>
-                  <span className="text-white/80">St. Paul</span>
+                  <span className="text-white/80">DuPage County</span>
                 </div>
                 <div className="flex items-center">
                   <div className="h-2 w-2 rounded-full bg-gold mr-2"></div>
-                  <span className="text-white/80">Bloomington</span>
+                  <span className="text-white/80">Lake County</span>
                 </div>
                 <div className="flex items-center">
                   <div className="h-2 w-2 rounded-full bg-gold mr-2"></div>
-                  <span className="text-white/80">Eden Prairie</span>
+                  <span className="text-white/80">Will COunty</span>
                 </div>
                 <div className="flex items-center">
                   <div className="h-2 w-2 rounded-full bg-gold mr-2"></div>
-                  <span className="text-white/80">Eagan</span>
+                  <span className="text-white/80">Kankakee County</span>
                 </div>
                 <div className="flex items-center">
                   <div className="h-2 w-2 rounded-full bg-gold mr-2"></div>
-                  <span className="text-white/80">Plymouth</span>
+                  <span className="text-white/80">Kendall County</span>
                 </div>
               </div>
             </div>

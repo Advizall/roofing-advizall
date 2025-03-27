@@ -1,21 +1,14 @@
-
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
-  return (
-    <footer className="bg-navy-600 pt-16 relative z-10">
+  return <footer className="bg-navy-600 pt-16 relative z-10">
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div>
             <a href="#hero" className="block mb-6">
-              <img 
-                src="/lovable-uploads/4811a69a-c3ba-4318-bb8c-d90d22539145.png" 
-                alt="PACC Solutions LLC" 
-                className="h-[76.8px]"
-                style={{ height: "76.8px" }}
-              />
+              <img src="/lovable-uploads/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions LLC" className="h-[76.8px]" style={{
+              height: "76.8px"
+            }} />
             </a>
             <p className="text-white/70 mb-6">
               Helping homeowners recover from storm damage with expertise and compassion.
@@ -62,7 +55,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-6 gold-gradient">Contact Us</h3>
             <ul className="space-y-3">
-              <li className="text-white/70">123 Recovery Lane, Minneapolis, MN 55401</li>
+              <li className="text-white/70">9150 Broadway Ave, Brookfield, IL 60513</li>
               <li><a href="tel:6125557890" className="text-white/70 hover:text-gold transition-colors">(612) 555-7890</a></li>
               <li><a href="mailto:contact@paccsolutions.com" className="text-white/70 hover:text-gold transition-colors">contact@paccsolutions.com</a></li>
               <li className="text-white/70">Mon-Fri: 8:00 AM - 6:00 PM</li>
@@ -78,8 +71,6 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
