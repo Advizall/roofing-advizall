@@ -1,6 +1,6 @@
 
 import ProcessStep from '../ui/ProcessStep';
-import { CalendarCheck, FileSearch, FileCheck, Tools } from 'lucide-react';
+import { CalendarCheck, FileSearch, FileCheck, Hammer } from 'lucide-react';
 
 const HowItWorks = () => {
   const steps = [
@@ -26,7 +26,7 @@ const HowItWorks = () => {
       number: 4,
       title: "We Manage the Repairs",
       description: "Once your claim is approved, our skilled team completes all necessary repairs with quality craftsmanship.",
-      icon: Tools
+      icon: Hammer
     }
   ];
 

@@ -1,6 +1,6 @@
 
 import ServiceCard from '../ui/ServiceCard';
-import { Clipboard, FileText, Home, Window, Phone } from 'lucide-react';
+import { Clipboard, FileText, Home, Building, Phone } from 'lucide-react';
 
 const Services = () => {
   const servicesList = [
@@ -20,7 +20,7 @@ const Services = () => {
       description: "Expert installation of high-quality roofing systems with industry-leading warranties and superior craftsmanship."
     },
     {
-      icon: Window,
+      icon: Building,
       title: "Window and Siding Restoration",
       description: "Complete repair or replacement of damaged windows and siding to protect your home's integrity and appearance."
     },
