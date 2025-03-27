@@ -8,9 +8,9 @@ const Hero = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-navy-500/80 z-10"></div>
         <img 
-          src="/roof-repair.jpg" 
-          alt="Home roof repair" 
-          className="w-full h-full object-cover"
+          src="/american-roof-repair.jpg" 
+          alt="American home roof repair" 
+          className="w-full h-full object-cover object-center"
         />
       </div>
       
@@ -18,14 +18,14 @@ const Hero = () => {
       <div className="container mx-auto px-6 py-24 relative z-20">
         <div className="max-w-4xl mx-auto text-center">
           <div className="reveal">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
               <span className="block">Protecting Your Home.</span>
               <span className="gold-gradient">Guiding Your Claims.</span>
             </h1>
           </div>
           
           <div className="reveal" style={{ animationDelay: '0.2s' }}>
-            <p className="text-xl md:text-2xl mb-10 text-white/90 leading-relaxed">
+            <p className="text-xl md:text-2xl mb-10 text-white/90 leading-relaxed drop-shadow-md">
               PACC Solutions LLC offers expert support for homeowners facing storm damage – from inspection to insurance negotiation and full restoration.
             </p>
           </div>
@@ -33,7 +33,7 @@ const Hero = () => {
           <div className="reveal" style={{ animationDelay: '0.4s' }}>
             <a 
               href="#contact" 
-              className="btn-primary text-lg inline-flex items-center"
+              className="btn-primary text-lg inline-flex items-center shadow-lg hover:shadow-xl transition-all"
             >
               Get a Free Inspection
               <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +46,7 @@ const Hero = () => {
       
       {/* Scroll indicator */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-        <a href="#about" className="text-white/70 hover:text-gold transition-colors">
+        <a href="#about" className="text-white/70 hover:text-gold transition-colors focus:outline-none focus:ring-2 focus:ring-gold/50 rounded-full p-2">
           <ArrowDown size={32} />
         </a>
       </div>
