@@ -1,6 +1,8 @@
 
 import { useState } from 'react';
 import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +12,7 @@ const Contact = () => {
     message: ''
   });
   
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -17,15 +20,45 @@ const Contact = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // In a real implementation, you would send this data to your backend
-    setSubmitted(true);
-    // Reset form after submission
-    setFormData({ name: '', email: '', phone: '', message: '' });
-    // Reset submitted state after 5 seconds
-    setTimeout(() => setSubmitted(false), 5000);
+    setIsSubmitting(true);
+    
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            message: formData.message
+          }
+        ]);
+        
+      if (error) {
+        console.error('Error submitting form:', error);
+        toast({
+          title: "Submission Failed",
+          description: "There was an error submitting your message. Please try again.",
+          variant: "destructive"
+        });
+      } else {
+        console.log('Form submitted successfully');
+        setSubmitted(true);
+        setFormData({ name: '', email: '', phone: '', message: '' });
+        setTimeout(() => setSubmitted(false), 5000);
+      }
+    } catch (error) {
+      console.error('Exception when submitting form:', error);
+      toast({
+        title: "Submission Error",
+        description: "An unexpected error occurred. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -50,12 +83,12 @@ const Contact = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="glass-card p-8 reveal" style={{ animationDelay: '0.3s' }}>
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+          <div className="glass-card p-8 reveal flex flex-col h-full" style={{ animationDelay: '0.3s' }}>
             <h3 className="text-2xl font-semibold mb-6 gold-gradient">Get In Touch</h3>
             
             {submitted ? (
-              <div className="flex flex-col items-center justify-center py-10">
+              <div className="flex flex-col items-center justify-center py-10 flex-grow">
                 <CheckCircle size={60} className="text-gold mb-4" />
                 <h4 className="text-xl font-medium mb-2">Thank You!</h4>
                 <p className="text-white/80 text-center">
@@ -63,7 +96,7 @@ const Contact = () => {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6 flex-grow flex flex-col">
                 <div>
                   <label htmlFor="name" className="block text-white/90 mb-2">Your Name</label>
                   <input
@@ -115,22 +148,25 @@ const Contact = () => {
                   ></textarea>
                 </div>
                 
-                <button 
-                  type="submit" 
-                  className="btn-primary w-full text-center"
-                >
-                  Get a Free Inspection
-                </button>
-                
-                <p className="text-white/60 text-sm text-center mt-4">
-                  By submitting this form, you agree to be contacted regarding our services.
-                </p>
+                <div className="mt-auto">
+                  <button 
+                    type="submit" 
+                    className="btn-primary w-full text-center"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Get a Free Inspection'}
+                  </button>
+                  
+                  <p className="text-white/60 text-sm text-center mt-4">
+                    By submitting this form, you agree to be contacted regarding our services.
+                  </p>
+                </div>
               </form>
             )}
           </div>
           
-          <div className="reveal" style={{ animationDelay: '0.4s' }}>
-            <div className="glass-card p-8 mb-8">
+          <div className="flex flex-col h-full">
+            <div className="glass-card p-8 mb-8 reveal" style={{ animationDelay: '0.4s' }}>
               <h3 className="text-2xl font-semibold mb-6 gold-gradient">Contact Information</h3>
               
               <div className="space-y-6">
@@ -160,7 +196,7 @@ const Contact = () => {
               </div>
             </div>
             
-            <div className="glass-card p-8">
+            <div className="glass-card p-8 reveal flex-grow" style={{ animationDelay: '0.4s' }}>
               <h3 className="text-2xl font-semibold mb-6 gold-gradient">Service Areas</h3>
               <p className="text-white/80 mb-4">
                 We proudly serve homeowners throughout Minnesota, including:
