@@ -38,9 +38,10 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <a href="#hero" className="flex items-center">
             <img 
-              src="/lovable-uploads/48bc42fe-bf06-4b83-8d50-34a56571dc8d.png" 
+              src="/lovable-uploads/4811a69a-c3ba-4318-bb8c-d90d22539145.png" 
               alt="PACC Solutions LLC" 
-              className="h-12 mr-4"
+              className="h-[19.2px]" 
+              style={{ height: "19.2px" }}
             />
           </a>
           
