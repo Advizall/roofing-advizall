@@ -1,69 +1,73 @@
-# Welcome to your Lovable project
+# PACC Solutions LLC - HomeGuardian
 
-## Project info
+A modern web application for PACC Solutions LLC, providing home security and surveillance solutions.
 
-**URL**: https://lovable.dev/projects/3b678203-c296-4247-b459-8bfbbf69558b
+## Getting Started
 
-## How can I edit this code?
+### Prerequisites
 
-There are several ways of editing your application.
+- Node.js (v18 or higher)
+- npm (v9 or higher)
 
-**Use Lovable**
+### Installation
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3b678203-c296-4247-b459-8bfbbf69558b) and start prompting.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/pacc-homeguardian.git
+   cd pacc-homeguardian
+   ```
 
-Changes made via Lovable will be committed automatically to this repo.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-**Use your preferred IDE**
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+4. Open your browser and navigate to `http://localhost:8080`
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Building for Production
 
-Follow these steps:
+To create a production build:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+The built files will be in the `dist` directory.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Deployment
 
-**Use GitHub Codespaces**
+This project is configured for deployment on Netlify. Simply push your changes to the main branch and Netlify will automatically deploy your updates.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Features
 
-## What technologies are used for this project?
+- Modern, responsive design
+- Home security solutions
+- Surveillance systems
+- Customer support
+- Contact form
+- Service information
 
-This project is built with .
+## Technologies Used
 
-- Vite
-- TypeScript
 - React
-- shadcn-ui
+- TypeScript
+- Vite
 - Tailwind CSS
+- Shadcn UI Components
 
-## How can I deploy this project?
+## Contributing
 
-Simply open [Lovable](https://lovable.dev/projects/3b678203-c296-4247-b459-8bfbbf69558b) and click on Share -> Publish.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## I want to use a custom domain - is that possible?
+## License
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+This project is licensed under the MIT License - see the LICENSE file for details.

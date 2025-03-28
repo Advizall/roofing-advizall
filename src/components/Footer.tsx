@@ -6,7 +6,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div>
             <a href="#hero" className="block mb-6">
-              <img src="/lovable-uploads/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions LLC" className="h-[76.8px]" style={{
+              <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions LLC" className="h-[76.8px]" style={{
               height: "76.8px"
             }} />
             </a>

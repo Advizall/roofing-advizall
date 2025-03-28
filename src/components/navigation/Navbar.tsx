@@ -40,7 +40,7 @@ const Navbar = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <a href="#hero" className="flex items-center">
-            <img src="/lovable-uploads/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions LLC" style={{
+            <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions LLC" style={{
             height: "76.8px"
           }} className="h-[100.8px]" />
           </a>
