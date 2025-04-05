@@ -1,7 +1,6 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Text } from '@react-three/drei';
+import { OrbitControls, Text, useTexture } from '@react-three/drei';
 import { Vector3 } from 'three';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navigation/Navbar';
@@ -21,6 +20,7 @@ const roofLayers = [
     position: [0, 0, 0],
     rotation: [0, 0, 0],
     scale: [2, 0.1, 2],
+    useTexture: true
   },
   {
     id: 'underlayment',
@@ -30,6 +30,7 @@ const roofLayers = [
     position: [0, 0.15, 0],
     rotation: [0, 0, 0],
     scale: [1.95, 0.05, 1.95],
+    useTexture: false
   },
   {
     id: 'drip-edge',
@@ -39,6 +40,7 @@ const roofLayers = [
     position: [0, 0.25, 0],
     rotation: [0, 0, 0],
     scale: [2.1, 0.03, 2.1],
+    useTexture: false
   },
   {
     id: 'shingles',
@@ -48,6 +50,7 @@ const roofLayers = [
     position: [0, 0.35, 0],
     rotation: [0, 0, 0],
     scale: [2, 0.1, 2],
+    useTexture: false
   },
   {
     id: 'ridge-cap',
@@ -57,17 +60,21 @@ const roofLayers = [
     position: [0, 0.5, 0],
     rotation: [0, 0, 0],
     scale: [0.5, 0.08, 2],
+    useTexture: false
   },
 ];
 
-// RoofLayer component
-const RoofLayer = ({ 
+// TexturedRoofLayer component
+const TexturedRoofLayer = ({ 
   position, 
   rotation, 
   scale, 
   color, 
-  visible = true
+  visible = true,
+  useTexture = false
 }) => {
+  const texture = useTexture(useTexture ? '/images/6cec3c84-d369-4d4c-b995-ee519e7d2c9a.png' : '');
+  
   return (
     <mesh 
       position={position} 
@@ -77,12 +84,41 @@ const RoofLayer = ({
       receiveShadow
     >
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial 
-        color={color} 
-        roughness={0.7}
-        metalness={0.3}
-      />
+      {useTexture ? (
+        <meshStandardMaterial 
+          map={texture}
+          roughness={0.5}
+          metalness={0.2}
+        />
+      ) : (
+        <meshStandardMaterial 
+          color={color} 
+          roughness={0.7}
+          metalness={0.3}
+        />
+      )}
     </mesh>
+  );
+};
+
+// RoofLayer component (for backward compatibility)
+const RoofLayer = ({ 
+  position, 
+  rotation, 
+  scale, 
+  color, 
+  visible = true,
+  useTexture = false
+}) => {
+  return (
+    <TexturedRoofLayer
+      position={position}
+      rotation={rotation}
+      scale={scale}
+      color={color}
+      visible={visible}
+      useTexture={useTexture}
+    />
   );
 };
 
@@ -103,6 +139,7 @@ const RoofModel = ({ activeLayer }) => {
           scale={layer.scale}
           color={layer.color}
           visible={index <= activeLayer}
+          useTexture={layer.useTexture && index <= activeLayer}
         />
       ))}
       
