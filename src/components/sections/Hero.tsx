@@ -1,3 +1,4 @@
+
 import { ArrowDown } from 'lucide-react';
 
 const Hero = () => {
@@ -29,12 +30,22 @@ const Hero = () => {
             </p>
           </div>
           
-          <div className="reveal" style={{ animationDelay: '0.4s' }}>
+          <div className="reveal flex flex-col md:flex-row justify-center items-center gap-4" style={{ animationDelay: '0.4s' }}>
             <a 
               href="#contact" 
               className="btn-primary text-lg inline-flex items-center shadow-lg hover:shadow-xl transition-all"
             >
               Get a Free Inspection
+              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+            
+            <a 
+              href="#" 
+              className="btn-primary text-lg inline-flex items-center shadow-lg hover:shadow-xl transition-all"
+            >
+              Our Customers
               <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
               </svg>
