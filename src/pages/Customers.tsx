@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Text } from '@react-three/drei';
+import { OrbitControls, Text } from '@react-three/drei';
 import { Vector3 } from 'three';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navigation/Navbar';
