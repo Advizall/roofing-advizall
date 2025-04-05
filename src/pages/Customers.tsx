@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Text, useTexture } from '@react-three/drei';
@@ -71,9 +72,10 @@ const TexturedRoofLayer = ({
   scale, 
   color, 
   visible = true,
-  useTexture = false
+  useTexture: shouldUseTexture = false
 }) => {
-  const texture = useTexture(useTexture ? '/images/6cec3c84-d369-4d4c-b995-ee519e7d2c9a.png' : '');
+  // Fix: Using a different name for the prop to avoid conflict with the hook
+  const texture = useTexture(shouldUseTexture ? '/images/6cec3c84-d369-4d4c-b995-ee519e7d2c9a.png' : '/placeholder.svg');
   
   return (
     <mesh 
@@ -84,7 +86,7 @@ const TexturedRoofLayer = ({
       receiveShadow
     >
       <boxGeometry args={[1, 1, 1]} />
-      {useTexture ? (
+      {shouldUseTexture ? (
         <meshStandardMaterial 
           map={texture}
           roughness={0.5}
@@ -108,7 +110,7 @@ const RoofLayer = ({
   scale, 
   color, 
   visible = true,
-  useTexture = false
+  useTexture: shouldUseTexture = false
 }) => {
   return (
     <TexturedRoofLayer
@@ -117,7 +119,7 @@ const RoofLayer = ({
       scale={scale}
       color={color}
       visible={visible}
-      useTexture={useTexture}
+      useTexture={shouldUseTexture}
     />
   );
 };
