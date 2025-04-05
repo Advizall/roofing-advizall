@@ -1,13 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
-  
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -19,61 +14,43 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
   const navLinks = [{
     name: 'Home',
-    href: '/#hero'
+    href: '#hero'
   }, {
     name: 'About',
-    href: '/#about'
+    href: '#about'
   }, {
     name: 'Services',
-    href: '/#services'
+    href: '#services'
   }, {
     name: 'Process',
-    href: '/#process'
+    href: '#process'
   }, {
     name: 'Testimonials',
-    href: '/#testimonials'
-  }, {
-    name: 'Customers',
-    href: '/customers'
+    href: '#testimonials'
   }, {
     name: 'Contact',
-    href: '/#contact'
+    href: '#contact'
   }];
-  
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-  
-  return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-400/90 backdrop-blur-md shadow-md' : 'bg-transparent'}`}>
+  return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-400/90 backdrop-blur-md shadow-md' : 'bg-transparent'}`}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center">
+          <a href="#hero" className="flex items-center">
             <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions LLC" style={{
-              height: "76.8px"
-            }} className="h-[100.8px]" />
-          </Link>
+            height: "76.8px"
+          }} className="h-[100.8px]" />
+          </a>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map(link => {
-              // Check if it's an absolute path (like /customers) or hash link on homepage
-              const isExternalLink = link.href.startsWith('/') && !link.href.startsWith('/#');
-              
-              return isExternalLink ? (
-                <Link key={link.name} to={link.href} className="nav-link">
-                  {link.name}
-                </Link>
-              ) : (
-                <a key={link.name} href={link.href} className="nav-link">
-                  {link.name}
-                </a>
-              );
-            })}
-            <a href="/#contact" className="btn-primary ml-4">
+            {navLinks.map(link => <a key={link.name} href={link.href} className="nav-link">
+                {link.name}
+              </a>)}
+            <a href="#contact" className="btn-primary ml-4">
               Get a Free Inspection
             </a>
           </nav>
@@ -86,42 +63,18 @@ const Navbar = () => {
       </div>
       
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-navy-300/95 backdrop-blur-lg">
+      {isMobileMenuOpen && <div className="md:hidden bg-navy-300/95 backdrop-blur-lg">
           <div className="container mx-auto px-6 py-4">
             <nav className="flex flex-col space-y-4">
-              {navLinks.map(link => {
-                const isExternalLink = link.href.startsWith('/') && !link.href.startsWith('/#');
-                
-                return isExternalLink ? (
-                  <Link 
-                    key={link.name} 
-                    to={link.href} 
-                    className="text-white hover:text-gold py-2 text-lg font-medium transition-colors" 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {link.name}
-                  </Link>
-                ) : (
-                  <a 
-                    key={link.name} 
-                    href={link.href} 
-                    className="text-white hover:text-gold py-2 text-lg font-medium transition-colors" 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {link.name}
-                  </a>
-                );
-              })}
-              <a href="/#contact" className="btn-primary text-center mt-4" onClick={() => setIsMobileMenuOpen(false)}>
+              {navLinks.map(link => <a key={link.name} href={link.href} className="text-white hover:text-gold py-2 text-lg font-medium transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                  {link.name}
+                </a>)}
+              <a href="#contact" className="btn-primary text-center mt-4" onClick={() => setIsMobileMenuOpen(false)}>
                 Get a Free Inspection
               </a>
             </nav>
           </div>
-        </div>
-      )}
-    </header>
-  );
+        </div>}
+    </header>;
 };
-
 export default Navbar;
