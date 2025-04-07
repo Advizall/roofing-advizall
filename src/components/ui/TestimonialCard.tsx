@@ -3,12 +3,12 @@ import { Star } from 'lucide-react';
 
 interface TestimonialCardProps {
   name: string;
-  location: string;
   testimonial: string;
   rating: number;
+  location?: string; // Making location optional
 }
 
-const TestimonialCard = ({ name, location, testimonial, rating }: TestimonialCardProps) => {
+const TestimonialCard = ({ name, testimonial, rating, location }: TestimonialCardProps) => {
   return (
     <div className="glass-card p-6 md:p-8 h-full gold-glow">
       <div className="flex mb-4">
@@ -27,7 +27,7 @@ const TestimonialCard = ({ name, location, testimonial, rating }: TestimonialCar
         </div>
         <div>
           <h4 className="font-semibold">{name}</h4>
-          <p className="text-white/70 text-sm">{location}</p>
+          {/* Location is no longer displayed */}
         </div>
       </div>
     </div>

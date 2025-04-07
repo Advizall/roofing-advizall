@@ -13,41 +13,86 @@ import useEmblaCarousel from "embla-carousel-react";
 const Testimonials = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
-  // Testimonials com cidades de Illinois
+  // Real testimonials from Google reviews
   const testimonials = [
     {
-      name: "Robert Johnson",
-      location: "Chicago, IL",
-      testimonial: "PACC Solutions was incredible throughout our entire roof replacement process. They handled everything with our insurance company and the new roof looks amazing!",
+      name: "Cindy",
+      testimonial: "PACC solutions went above and beyond! We would have never been able to get a full replacement of our cedar shake roof without them. We just had to sign and they did all the hard stuff. They battled with our insurance for about a year to get everything approved!",
       rating: 5
     },
     {
-      name: "Sarah Miller",
-      location: "Naperville, IL",
-      testimonial: "After a severe hailstorm damaged our siding, PACC helped us navigate the complex insurance claim. Their team was professional and completed the repairs promptly.",
+      name: "Raed Bisharat",
+      testimonial: "The team from PACC did an amazing job on my home. We had hail damage on our Cedar roof. After searching high and low for a Tuscan Clay style roof, we gave up. One day Kosta knocked on our door, and PACC handled it all. Highly recommend!",
       rating: 5
     },
     {
-      name: "Michael Thomas",
-      location: "Tinley Park, IL",
-      testimonial: "The inspection team was thorough and found damage that I hadn't even noticed. They helped me get a full roof replacement covered when my insurance initially denied the claim.",
+      name: "Kevin Bailey",
+      testimonial: "I hired PACC Solutions to repair the hail damage to my roof and gutter. From start to finish, I am impressed with the professionalism of their employees and systems. Daniel worked with me and my insurance company with the utmost care.",
       rating: 5
     },
     {
-      name: "Jennifer Wilson",
-      location: "Orland Park, IL",
-      testimonial: "From the initial consultation to the final inspection, PACC's attention to detail was impressive. They truly advocate for homeowners!",
-      rating: 4
+      name: "Anthony M Wilson",
+      testimonial: "Pacc Solutions came as advertised. They were prompt. They were efficient. They did everything they stated they were going to do when it came to making sure that my roof was examined, replaced, and cleaned perfectly. Top notch service!",
+      rating: 5
     },
     {
-      name: "David Martinez",
-      location: "Palos Hills, IL",
-      testimonial: "After a windstorm damaged multiple properties in our neighborhood, PACC handled everything efficiently. Their communication throughout the process was excellent.",
+      name: "Damir Alic",
+      testimonial: "Wow is an understatement for PACC. From start to end, the ease of communication and while on the job was exceptional. My house looks beautiful and is a definite attraction in the neighborhood. I would highly recommend them to everyone!",
+      rating: 5
+    },
+    {
+      name: "Tom K",
+      testimonial: "It is always the result that matters most. And I have a 5-star roof, gutter, and window fascia result to brag about with the neighbors. There were a couple of twists and turns, but ultimately, it ended with a fantastic outcome.",
+      rating: 5
+    },
+    {
+      name: "Michelle Zwolinski",
+      testimonial: "I highly recommend Pacc Solutions! They were very professional and helpful every step of the way. I had a new roof and siding installed, and it turned out great! My roof was able to be installed in one day — impressive work!",
+      rating: 5
+    },
+    {
+      name: "Cherry Lyn Salaguste",
+      testimonial: "I've been extremely impressed with PACC Solutions and the outstanding job they did on our roof. The entire process—from start to finish—was seamless and stress-free. They even worked directly with our insurance!",
+      rating: 5
+    },
+    {
+      name: "Mia Bratta",
+      testimonial: "The roofing project for our house was a massive job and you guys NAILED it! Our roof is unique and steep, but the team made all the necessary adjustments. Super professional and results exceeded expectations!",
+      rating: 5
+    },
+    {
+      name: "Zak Rainey",
+      testimonial: "First of all, the service was top notch! From the estimator to the insurance claim handler, the project manager, and the crew — it was a great experience working with PACC Solutions. Highly recommended!",
+      rating: 5
+    },
+    {
+      name: "Joseph Wisniewski",
+      testimonial: "PACC Solutions are extremely professional. I had extensive hail damage to my roof. They worked with my insurance directly and received the okay to fully replace my roof. The crew did an excellent job!",
+      rating: 5
+    },
+    {
+      name: "Richard Baske",
+      testimonial: "Pacc Solutions did an outstanding job replacing my roof. Kostas provided us with detailed explanations and worked with our insurance company to get the entire roof and gutters approved for replacement.",
+      rating: 5
+    },
+    {
+      name: "Jim Skoczen",
+      testimonial: "PACC Solutions did a great job from filing my claim to the actual roof installation. Everyone — sales, claims, project manager — were responsive and answered all my questions. Cleanup was excellent. Highly recommend!",
+      rating: 5
+    },
+    {
+      name: "Colleen Nodelman",
+      testimonial: "PACC Solutions did both our roof and our siding. They worked with our insurance and made it such a seamless process. They handled everything from permits to ensuring we were in compliance with our HOA. Fantastic job!",
+      rating: 5
+    },
+    {
+      name: "Donna Evanoff",
+      testimonial: "At first, I was worried working with an Illinois company living in Indiana, but I was pleasantly surprised. PACC did an amazing job on my home! I went from nervous to completely satisfied. I highly recommend them!",
       rating: 5
     }
   ];
 
-  // Auto-rotação do carrossel a cada 5 segundos
+  // Auto-rotation of the carousel every 5 seconds
   useEffect(() => {
     if (!emblaApi) return;
 
@@ -88,7 +133,6 @@ const Testimonials = () => {
                 >
                   <TestimonialCard
                     name={testimonial.name}
-                    location={testimonial.location}
                     testimonial={testimonial.testimonial}
                     rating={testimonial.rating}
                   />
