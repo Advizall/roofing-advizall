@@ -52,7 +52,11 @@ const Testimonials = () => {
     if (!emblaApi) return;
 
     const interval = setInterval(() => {
-      emblaApi.scrollNext();
+      if (emblaApi.canScrollNext()) {
+        emblaApi.scrollNext();
+      } else {
+        emblaApi.scrollTo(0);
+      }
     }, 5000);
 
     return () => clearInterval(interval);
