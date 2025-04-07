@@ -1,32 +1,62 @@
 
 import ProcessStep from '../ui/ProcessStep';
-import { CalendarCheck, FileSearch, FileCheck, Hammer } from 'lucide-react';
+import { ClipboardCheck, FileText, Users, Calculator, Palette, HardHat, CheckSquare, Receipt, DollarSign } from 'lucide-react';
 
 const HowItWorks = () => {
   const steps = [
     {
       number: 1,
-      title: "Schedule Free Inspection",
-      description: "Contact us to arrange a no-obligation inspection of your property at a time that works for you.",
-      icon: CalendarCheck
+      title: "Damage Assessment",
+      description: "Once you sign the agreement, our HAAG-certified Inspectors complete a thorough damage assessment to determine if your property qualifies for a claim.",
+      icon: ClipboardCheck
     },
     {
       number: 2,
-      title: "We Document the Damage",
-      description: "Our experts thoroughly assess and document all storm-related damage to support your insurance claim.",
-      icon: FileSearch
+      title: "File Claim",
+      description: "Our Office Executive calls your insurance carrier to set up the claim file, report the damages found during the damage assessment, and submit all the necessary documentation.",
+      icon: FileText
     },
     {
       number: 3,
-      title: "We Handle Your Insurance Claim",
-      description: "We communicate directly with your insurance company, negotiating to ensure you receive fair compensation.",
-      icon: FileCheck
+      title: "Adjuster Meeting",
+      description: "We schedule a date and time to meet on-site with the insurance carrier's Adjuster. This meeting is essential as it allows us to show them the damage and agree on a scope of work.",
+      icon: Users
     },
     {
       number: 4,
-      title: "We Manage the Repairs",
-      description: "Once your claim is approved, our skilled team completes all necessary repairs with quality craftsmanship.",
-      icon: Hammer
+      title: "Estimate Review",
+      description: "After we receive the adjuster's first draft estimate, our Claim Management Team will review it to ensure it includes all needed components for a complete project.",
+      icon: Calculator
+    },
+    {
+      number: 5,
+      title: "Design Meeting",
+      description: "Once we have an agreed estimate, our Account Executive will schedule a meeting with you to discuss the scope of work and help you choose colors and materials.",
+      icon: Palette
+    },
+    {
+      number: 6,
+      title: "Property Restoration",
+      description: "With the colors and materials decided on, our Project Manager will review and set up your project. They will pull the permits, order materials, and schedule a start date.",
+      icon: HardHat
+    },
+    {
+      number: 7,
+      title: "Final Walk-Through",
+      description: "Once all the work is complete, our Project Executive will schedule a quality walk to ensure it was completed to your satisfaction.",
+      icon: CheckSquare
+    },
+    {
+      number: 8,
+      title: "Billing",
+      description: "It's common to find additional costs during the restoration phase of the process. Additional costs, if any, are documented and sent to the insurance carrier for consideration.",
+      icon: Receipt
+    },
+    {
+      number: 9,
+      title: "Final Payment",
+      description: "Once the final payment arrives, our Finance Manager will contact you to coordinate the pickup. With your account paid in full, this completes the entire process.",
+      icon: DollarSign
     }
   ];
 
@@ -38,7 +68,7 @@ const HowItWorks = () => {
             How It <span className="gold-gradient">Works</span>
           </h2>
           <p className="text-lg max-w-3xl mx-auto text-white/80 reveal" style={{ animationDelay: '0.2s' }}>
-            Our streamlined process makes recovery from storm damage simple and stress-free.
+            Our complete restoration process from assessment to final payment.
           </p>
         </div>
 
