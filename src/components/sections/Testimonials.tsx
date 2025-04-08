@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react';
 import TestimonialCard from '../ui/TestimonialCard';
 import {
@@ -8,11 +7,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 const Testimonials = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
-
   // Real testimonials from Google reviews
   const testimonials = [
     {
@@ -92,21 +89,6 @@ const Testimonials = () => {
     }
   ];
 
-  // Auto-rotation of the carousel every 5 seconds
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const interval = setInterval(() => {
-      if (emblaApi.canScrollNext()) {
-        emblaApi.scrollNext();
-      } else {
-        emblaApi.scrollTo(0);
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [emblaApi]);
-
   return (
     <section id="testimonials" className="section-padding bg-navy-400 relative">
       <div className="container mx-auto">
@@ -122,7 +104,7 @@ const Testimonials = () => {
         <div className="reveal" style={{ animationDelay: '0.3s' }}>
           <Carousel 
             opts={{ loop: true, align: "center" }}
-            ref={emblaRef}
+            plugins={[Autoplay({ delay: 15000, stopOnInteraction: false })]}
             className="w-full"
           >
             <CarouselContent className="-ml-4">
