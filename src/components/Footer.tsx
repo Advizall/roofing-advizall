@@ -1,3 +1,4 @@
+
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -58,9 +59,8 @@ const Footer = () => {
               <li className="text-white/70">9150 Broadway Ave, Brookfield, IL 60513</li>
               <li><a href="tel:6125557890" className="text-white/70 hover:text-gold transition-colors">(612) 555-7890</a></li>
               <li><a href="mailto:contact@paccsolutions.com" className="text-white/70 hover:text-gold transition-colors">contact@paccsolutions.com</a></li>
-              <li className="text-white/70">Mon-Fri: 8:00 AM - 6:00 PM</li>
-              <li className="text-white/70">Sat: 9:00 AM - 2:00 PM</li>
-              <li className="text-white/70">Sun: Closed (Emergency services available)</li>
+              <li className="text-white/70">Mon-Fri: 9:00 AM - 5:00 PM</li>
+              <li className="text-white/70">Sat-Sun: Closed (Emergency services available)</li>
             </ul>
           </div>
         </div>
