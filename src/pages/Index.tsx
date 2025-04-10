@@ -27,7 +27,22 @@ const Index = () => {
     // Initial check on page load
     handleReveal();
     
-    return () => window.removeEventListener('scroll', handleReveal);
+    // Handle video player fullscreen exit
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        const videoPlayers = document.querySelectorAll('.video-player');
+        videoPlayers.forEach(player => {
+          player.classList.remove('fullscreen');
+        });
+      }
+    };
+    
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    
+    return () => {
+      window.removeEventListener('scroll', handleReveal);
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
   }, []);
   
   return (
