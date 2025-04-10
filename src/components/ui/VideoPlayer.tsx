@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactPlayer from 'react-player/lazy';
 import { Play, Pause, Volume2, VolumeX, Maximize, Minimize } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface VideoPlayerProps {
   url: string;
@@ -20,6 +21,7 @@ const VideoPlayer = ({ url, title, className }: VideoPlayerProps) => {
   const [controlsVisible, setControlsVisible] = useState(true);
   const [loaded, setLoaded] = useState(false);
   
+  const isMobile = useIsMobile();
   const playerRef = useRef<ReactPlayer>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -46,15 +48,32 @@ const VideoPlayer = ({ url, title, className }: VideoPlayerProps) => {
     const playerContainer = containerRef.current;
     if (playerContainer) {
       playerContainer.addEventListener('mousemove', handleMouseMove);
+      playerContainer.addEventListener('touchstart', handleMouseMove);
       
       return () => {
         playerContainer.removeEventListener('mousemove', handleMouseMove);
+        playerContainer.removeEventListener('touchstart', handleMouseMove);
         if (controlsTimeout.current) {
           clearTimeout(controlsTimeout.current);
         }
       };
     }
   }, [playing]);
+
+  // Handle fullscreen change events
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setFullscreen(!!document.fullscreenElement);
+    };
+    
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
 
   const handlePlayPause = () => {
     setPlaying(!playing);
@@ -92,14 +111,34 @@ const VideoPlayer = ({ url, title, className }: VideoPlayerProps) => {
   };
 
   const handleToggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      containerRef.current?.requestFullscreen().catch((err) => {
-        console.error(`Error attempting to enable fullscreen: ${err.message}`);
-      });
-      setFullscreen(true);
+    if (isMobile) {
+      // No iOS, use o fullscreen nativo do youtube
+      if (playerRef.current) {
+        // Pausar e reiniciar o vídeo com controles nativos do YouTube
+        const currentTime = playerRef.current.getCurrentTime();
+        
+        // Criar uma URL de incorporação que vai para o mesmo ponto do vídeo
+        // e forçar controles nativos e fullscreen
+        const videoId = url.includes('youtube.com') 
+          ? url.split('v=')[1].split('&')[0]
+          : url.includes('youtu.be')
+            ? url.split('/').pop()?.split('?')[0]
+            : '';
+            
+        if (videoId) {
+          const encodedUrl = `https://www.youtube.com/watch?v=${videoId}&t=${Math.floor(currentTime)}s&fs=1&controls=1`;
+          window.open(encodedUrl, '_blank');
+        }
+      }
     } else {
-      document.exitFullscreen();
-      setFullscreen(false);
+      // Em desktop, use a API Fullscreen normal
+      if (!document.fullscreenElement) {
+        containerRef.current?.requestFullscreen().catch((err) => {
+          console.error(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
     }
   };
 
@@ -181,6 +220,8 @@ const VideoPlayer = ({ url, title, className }: VideoPlayerProps) => {
             onMouseDown={handleSeekMouseDown}
             onChange={handleSeekChange}
             onMouseUp={handleSeekMouseUp}
+            onTouchStart={handleSeekMouseDown}
+            onTouchEnd={handleSeekMouseUp as any}
             className="w-full h-1.5 bg-white/20 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gold"
           />
           <div className="flex justify-between text-xs mt-1 text-white/80">
@@ -221,6 +262,7 @@ const VideoPlayer = ({ url, title, className }: VideoPlayerProps) => {
           <button 
             onClick={handleToggleFullscreen} 
             className="text-white hover:text-gold transition-colors"
+            aria-label="Toggle fullscreen"
           >
             {fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
           </button>
