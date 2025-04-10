@@ -4,22 +4,22 @@ import { Shield, Users, Heart, Award, Lightbulb, Compass } from 'lucide-react';
 const About = () => {
   const milestones = [
     {
-      year: '2015',
+      year: '01',
       title: 'Founded',
       description: 'PACC Solutions LLC was established with a mission to help homeowners navigate storm damage recovery.'
     },
     {
-      year: '2018',
+      year: '02',
       title: 'Regional Expansion',
       description: 'Expanded services to cover the entire Midwest region, helping hundreds of families.'
     },
     {
-      year: '2020',
+      year: '03',
       title: 'Industry Recognition',
       description: 'Received "Excellence in Customer Service" award from the National Restoration Association.'
     },
     {
-      year: '2023',
+      year: '04',
       title: 'Technology Integration',
       description: 'Implemented advanced digital inspection tools and customer communication platforms.'
     }
