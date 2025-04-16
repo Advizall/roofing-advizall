@@ -282,7 +282,7 @@ const Contact = () => {
             }}>
               <h3 className="text-2xl font-semibold mb-6 gold-gradient">Service Areas</h3>
               <p className="text-white/80 mb-4">
-                We proudly serve homeowners throughout Minnesota, including:
+                We proudly serve homeowners throughout Illinois, including:
               </p>
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex items-center">
