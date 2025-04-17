@@ -26,7 +26,7 @@ const Login = () => {
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
-        navigate('/');
+        navigate('/client-dashboard');
       }
     };
     
@@ -52,8 +52,8 @@ const Login = () => {
         variant: "default",
       });
       
-      // Redirect to home page after successful login
-      navigate('/');
+      // Redirect to client dashboard after successful login
+      navigate('/client-dashboard');
       
     } catch (err: any) {
       console.error('Login error:', err);
