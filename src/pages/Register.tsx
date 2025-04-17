@@ -62,12 +62,25 @@ const Register = () => {
         options: {
           data: {
             full_name: fullName,
-            username,
+            username, // Ensure username is included in the user metadata
           },
         },
       });
       
       if (error) throw error;
+      
+      // If successful, also update the profiles table with the username
+      // This is just an extra step to ensure username is set correctly
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({ username })
+          .eq('id', data.user.id);
+          
+        if (profileError) {
+          console.error('Error updating profile:', profileError);
+        }
+      }
       
       toast({
         title: "Account created successfully!",
@@ -85,6 +98,8 @@ const Register = () => {
         setErrors({ ...errors, email: error.message });
       } else if (error.message.includes('password')) {
         setErrors({ ...errors, password: error.message });
+      } else if (error.message.includes('username')) {
+        setErrors({ ...errors, username: error.message });
       } else {
         toast({
           title: "Registration failed",
