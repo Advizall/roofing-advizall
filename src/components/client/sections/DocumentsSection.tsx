@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { FilePdf, FileText, Download, PenTool } from 'lucide-react';
+import { FileIcon, FileText, Download, PenTool } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const DocumentsSection: React.FC = () => {
@@ -45,7 +45,7 @@ const DocumentsSection: React.FC = () => {
   const getFileIcon = (type: string) => {
     switch(type) {
       case 'pdf':
-        return <FilePdf size={18} className="text-red-400" />;
+        return <FileIcon size={18} className="text-red-400" />;
       default:
         return <FileText size={18} className="text-blue-400" />;
     }

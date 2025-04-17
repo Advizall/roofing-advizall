@@ -16,6 +16,13 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
   const pendingDocuments = 1;
   const projectCompletion = 25; // percentage
   
+  const navigateToSection = (section: string) => {
+    const element = document.querySelector(`[data-section="${section}"]`);
+    if (element) {
+      (element as HTMLElement).click();
+    }
+  };
+  
   return (
     <div className="space-y-6">
       <div>
@@ -78,12 +85,12 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
           <CardContent>
             {unreadMessages > 0 ? (
               <div className="flex items-center justify-between">
-                <span>You have {unreadMessages} unread message{unreadMessages !== 1 ? 's' : ''}</span>
+                <span>You have {unreadMessages} unread {unreadMessages === 1 ? 'message' : 'messages'}</span>
                 <a 
                   href="#" 
                   onClick={(e) => {
                     e.preventDefault();
-                    document.querySelector('[data-section="messages"]')?.click();
+                    navigateToSection("messages");
                   }}
                   className="text-gold hover:underline text-sm"
                 >
@@ -110,13 +117,13 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
             {pendingDocuments > 0 ? (
               <div className="flex items-center justify-between">
                 <span>
-                  {pendingDocuments} document{pendingDocuments !== 1 ? 's' : ''} require{pendingDocuments === 1 ? 's' : ''} your signature
+                  {pendingDocuments} {pendingDocuments === 1 ? 'document' : 'documents'} {pendingDocuments === 1 ? 'requires' : 'require'} your signature
                 </span>
                 <a 
                   href="#" 
                   onClick={(e) => {
                     e.preventDefault();
-                    document.querySelector('[data-section="documents"]')?.click();
+                    navigateToSection("documents");
                   }}
                   className="text-gold hover:underline text-sm"
                 >
@@ -158,7 +165,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
                 href="#" 
                 onClick={(e) => {
                   e.preventDefault();
-                  document.querySelector('[data-section="photos"]')?.click();
+                  navigateToSection("photos");
                 }}
                 className="text-gold hover:underline text-sm"
               >
@@ -188,7 +195,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
                 href="#" 
                 onClick={(e) => {
                   e.preventDefault();
-                  document.querySelector('[data-section="faq"]')?.click();
+                  navigateToSection("faq");
                 }}
                 className="text-gold hover:underline text-sm"
               >
@@ -199,7 +206,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
                 href="#" 
                 onClick={(e) => {
                   e.preventDefault();
-                  document.querySelector('[data-section="report"]')?.click();
+                  navigateToSection("report");
                 }}
                 className="text-gold hover:underline text-sm"
               >
