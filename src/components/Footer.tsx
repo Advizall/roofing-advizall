@@ -1,4 +1,6 @@
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+
+import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return <footer className="bg-navy-600 pt-16 relative z-10">
@@ -17,8 +19,8 @@ const Footer = () => {
               <a href="https://m.facebook.com/paccsolutions" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
                 <Facebook size={18} className="text-white" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
-                <Twitter size={18} className="text-white" />
+              <a href="https://www.youtube.com/@paccsolutionsllc2788" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
+                <Youtube size={18} className="text-white" />
               </a>
               <a href="https://www.instagram.com/paccsolutions/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
                 <Instagram size={18} className="text-white" />
