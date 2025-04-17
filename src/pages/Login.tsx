@@ -1,11 +1,13 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { Eye, EyeOff, LogIn, AlertCircle, Mail } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/navigation/Navbar';
 import Footer from '@/components/Footer';
 
@@ -15,26 +17,51 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        navigate('/');
+      }
+    };
+    
+    checkSession();
+  }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
     
-    // This is just a placeholder for actual authentication logic
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       
-      // For demo purposes, show error on incorrect credentials
-      if (email !== 'demo@example.com' || password !== 'password') {
-        throw new Error('Invalid email or password');
+      if (error) throw error;
+      
+      toast({
+        title: "Login successful",
+        description: "Welcome back!",
+        variant: "default",
+      });
+      
+      // Redirect to home page after successful login
+      navigate('/');
+      
+    } catch (err: any) {
+      console.error('Login error:', err);
+      setError(err.message || 'Invalid email or password');
+      
+      if (err.message === 'Invalid login credentials') {
+        setError('Invalid email or password. Please try again.');
       }
-      
-      // Successful login would redirect or update auth state here
-      console.log('Login successful');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -60,23 +87,27 @@ const Login = () => {
             
             <CardContent>
               {error && (
-                <div className="mb-4 p-3 bg-red-500/20 border border-red-500/40 rounded-md text-red-200 text-sm">
-                  {error}
+                <div className="mb-4 p-3 bg-red-500/20 border border-red-500/40 rounded-md text-red-200 text-sm flex items-start">
+                  <AlertCircle size={16} className="mr-2 mt-0.5 flex-shrink-0" />
+                  <span>{error}</span>
                 </div>
               )}
               
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-white">Email</Label>
-                  <Input
-                    id="email"
-                    type="email" 
-                    placeholder="your.email@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-navy-200 border-navy-100 text-white"
-                    required
-                  />
+                  <div className="relative">
+                    <Input
+                      id="email"
+                      type="email" 
+                      placeholder="your.email@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-navy-200 border-navy-100 text-white pl-10"
+                      required
+                    />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={18} />
+                  </div>
                 </div>
                 
                 <div className="space-y-2">
