@@ -1,13 +1,44 @@
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MapPin, Home, CheckCircle2 } from 'lucide-react';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface MapSectionProps {
   profile?: any;
 }
 
+// Temporary Mapbox token (replace with your own in production)
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibG92YWJsZWFpIiwiYSI6ImNscnlvODhyYjAwcGYyaW85dzZnNzFocnQifQ.up8FwYOFwtvx9dugahy7hA';
+
+// Project locations
+const projectLocations = [
+  {
+    id: 1,
+    coordinates: [-87.743848, 41.676150],
+    title: 'Project Site 1',
+    description: 'Roof repair completed Jan 2023'
+  },
+  {
+    id: 2,
+    coordinates: [-87.791436, 41.699019],
+    title: 'Project Site 2',
+    description: 'Siding installation Mar 2023'
+  },
+  {
+    id: 3,
+    coordinates: [-87.806638, 41.658869],
+    title: 'Project Site 3',
+    description: 'Solar panel installation Dec 2022'
+  }
+];
+
 const MapSection: React.FC<MapSectionProps> = ({ profile }) => {
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
+
   // This would come from your backend in a real implementation
   const localStats = {
     zipCode: profile?.zip_code || '12345',
@@ -22,6 +53,61 @@ const MapSection: React.FC<MapSectionProps> = ({ profile }) => {
       windows: 68
     }
   };
+
+  useEffect(() => {
+    if (!mapContainer.current || map.current) return;
+
+    // Initialize map
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+    
+    const newMap = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [-87.773, 41.680], // Center between all markers
+      zoom: 11.5,
+    });
+
+    // Add navigation controls
+    newMap.addControl(
+      new mapboxgl.NavigationControl(),
+      'top-right'
+    );
+
+    newMap.on('load', () => {
+      setMapLoaded(true);
+      
+      // Add markers for project locations
+      projectLocations.forEach(location => {
+        // Create a custom marker element
+        const markerEl = document.createElement('div');
+        markerEl.className = 'custom-marker';
+        markerEl.style.width = '32px';
+        markerEl.style.height = '32px';
+        markerEl.style.backgroundImage = 'url(/images/logo.png)';
+        markerEl.style.backgroundSize = 'cover';
+        markerEl.style.borderRadius = '50%';
+        markerEl.style.border = '2px solid #D4AF37'; // Gold color
+        markerEl.style.cursor = 'pointer';
+        
+        // Create and add the marker
+        const popup = new mapboxgl.Popup({ offset: 25 })
+          .setHTML(`<h3 style="font-weight:bold">${location.title}</h3><p>${location.description}</p>`);
+        
+        new mapboxgl.Marker(markerEl)
+          .setLngLat(location.coordinates)
+          .setPopup(popup)
+          .addTo(newMap);
+      });
+    });
+
+    map.current = newMap;
+
+    // Cleanup
+    return () => {
+      map.current?.remove();
+      map.current = null;
+    };
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -42,14 +128,16 @@ const MapSection: React.FC<MapSectionProps> = ({ profile }) => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="aspect-video bg-navy-200 rounded-md flex items-center justify-center relative">
-                {/* In a real implementation, this would be replaced with an actual map */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <MapPin size={48} className="text-gold" />
-                </div>
-                <p className="text-white/50 absolute bottom-4 left-4">
-                  Interactive map would be displayed here
-                </p>
+              <div className="aspect-video bg-navy-200 rounded-md relative">
+                <div ref={mapContainer} className="absolute inset-0 rounded-md" />
+                {!mapLoaded && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold"></div>
+                  </div>
+                )}
+              </div>
+              <div className="mt-4 text-sm text-white/60">
+                <p>Map shows completed PACC projects in your area. Click on markers to see project details.</p>
               </div>
             </CardContent>
           </Card>

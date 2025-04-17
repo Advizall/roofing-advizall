@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, User, Menu } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -62,7 +62,6 @@ const ClientNavbar = () => {
         
         <div className="hidden md:flex items-center gap-4">
           <div className="flex items-center text-white">
-            <User size={18} className="mr-2 text-gold" />
             <span>Welcome, {userName}</span>
           </div>
           
@@ -88,7 +87,6 @@ const ClientNavbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden mt-4 bg-navy-300 rounded p-4 flex flex-col gap-4">
           <div className="flex items-center text-white">
-            <User size={18} className="mr-2 text-gold" />
             <span>Welcome, {userName}</span>
           </div>
           
