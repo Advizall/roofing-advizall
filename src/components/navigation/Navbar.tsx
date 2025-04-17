@@ -1,8 +1,12 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -11,9 +15,11 @@ const Navbar = () => {
         setIsScrolled(false);
       }
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   const navLinks = [{
     name: 'Home',
     href: '#hero'
@@ -33,9 +39,11 @@ const Navbar = () => {
     name: 'Contact',
     href: '#contact'
   }];
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
   return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-400/90 backdrop-blur-md shadow-md' : 'bg-transparent'}`}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
@@ -53,6 +61,9 @@ const Navbar = () => {
             <a href="#contact" className="btn-primary ml-4">
               Get a Free Inspection
             </a>
+            <Link to="/login" className="nav-link ml-4">
+              Login
+            </Link>
           </nav>
           
           {/* Mobile Menu Button */}
@@ -72,9 +83,13 @@ const Navbar = () => {
               <a href="#contact" className="btn-primary text-center mt-4" onClick={() => setIsMobileMenuOpen(false)}>
                 Get a Free Inspection
               </a>
+              <Link to="/login" className="text-white hover:text-gold py-2 text-lg font-medium transition-colors text-center" onClick={() => setIsMobileMenuOpen(false)}>
+                Login
+              </Link>
             </nav>
           </div>
         </div>}
     </header>;
 };
+
 export default Navbar;
