@@ -58,12 +58,12 @@ const Navbar = () => {
             {navLinks.map(link => <a key={link.name} href={link.href} className="nav-link">
                 {link.name}
               </a>)}
-            <a href="#contact" className="btn-primary ml-4">
-              Get a Free Inspection
-            </a>
             <Link to="/login" className="nav-link ml-4">
               Login
             </Link>
+            <a href="#contact" className="btn-primary ml-4">
+              Get a Free Inspection
+            </a>
           </nav>
           
           {/* Mobile Menu Button */}
@@ -80,12 +80,12 @@ const Navbar = () => {
               {navLinks.map(link => <a key={link.name} href={link.href} className="text-white hover:text-gold py-2 text-lg font-medium transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                   {link.name}
                 </a>)}
-              <a href="#contact" className="btn-primary text-center mt-4" onClick={() => setIsMobileMenuOpen(false)}>
-                Get a Free Inspection
-              </a>
               <Link to="/login" className="text-white hover:text-gold py-2 text-lg font-medium transition-colors text-center" onClick={() => setIsMobileMenuOpen(false)}>
                 Login
               </Link>
+              <a href="#contact" className="btn-primary text-center mt-4" onClick={() => setIsMobileMenuOpen(false)}>
+                Get a Free Inspection
+              </a>
             </nav>
           </div>
         </div>}
