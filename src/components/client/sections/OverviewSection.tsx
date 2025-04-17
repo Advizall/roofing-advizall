@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarIcon, FileText, Image, MessageSquare, AlertCircle } from 'lucide-react';
@@ -85,7 +84,9 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
           <CardContent>
             {unreadMessages > 0 ? (
               <div className="flex items-center justify-between">
-                <span>You have {unreadMessages} unread {unreadMessages === 1 ? 'message' : 'messages'}</span>
+                <span>
+                  You have {unreadMessages} unread {unreadMessages === 1 ? 'message' : 'messages'}
+                </span>
                 <a 
                   href="#" 
                   onClick={(e) => {
@@ -150,7 +151,6 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-2">
-              {/* Placeholder for project images */}
               {[1, 2, 3].map((i) => (
                 <div 
                   key={i}
