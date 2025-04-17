@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Menu } from 'lucide-react';
@@ -54,7 +53,7 @@ const ClientNavbar = () => {
     <nav className="bg-navy-200 border-b border-gold/20 py-4 px-6">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <img src="/images/logo.png" alt="PACC Solutions" className="h-10" />
+          <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions" className="h-16" />
           <span className="text-gold ml-4 font-semibold hidden md:inline-block">
             Client Dashboard
           </span>

@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { List, CheckCircle2 } from 'lucide-react';
+import VideoPlayer from '@/components/ui/VideoPlayer';
 
 const VideoSection: React.FC = () => {
   return (
@@ -23,14 +23,11 @@ const VideoSection: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="aspect-video bg-black rounded-md flex items-center justify-center relative">
-                {/* In a real implementation, this would be replaced with actual video player */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-gold/90 flex items-center justify-center cursor-pointer">
-                    <div className="w-0 h-0 border-y-8 border-y-transparent border-l-12 border-l-navy-500 ml-1"></div>
-                  </div>
-                </div>
-              </div>
+              <VideoPlayer 
+                url="https://www.youtube.com/watch?v=0V11iemMsB8" 
+                title="PACC Solutions Process Explanation"
+                className="aspect-video rounded-md overflow-hidden shadow-gold"
+              />
             </CardContent>
           </Card>
         </div>
