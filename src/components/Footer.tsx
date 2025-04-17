@@ -1,4 +1,3 @@
-
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -15,13 +14,13 @@ const Footer = () => {
               Helping homeowners recover from storm damage with expertise and compassion.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
+              <a href="https://m.facebook.com/paccsolutions" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
                 <Facebook size={18} className="text-white" />
               </a>
               <a href="#" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
                 <Twitter size={18} className="text-white" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
+              <a href="https://www.instagram.com/paccsolutions/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
                 <Instagram size={18} className="text-white" />
               </a>
               <a href="#" className="w-10 h-10 rounded-full bg-navy-400 flex items-center justify-center hover:bg-gold transition-colors duration-300">
@@ -57,7 +56,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-6 gold-gradient">Contact Us</h3>
             <ul className="space-y-3">
               <li className="text-white/70">9150 Broadway Ave, Brookfield, IL 60513</li>
-              <li><a href="tel:6125557890" className="text-white/70 hover:text-gold transition-colors">(612) 555-7890</a></li>
+              <li><a href="tel:8773501690" className="text-white/70 hover:text-gold transition-colors">(877) 350-1690</a></li>
               <li><a href="mailto:contact@paccsolutions.com" className="text-white/70 hover:text-gold transition-colors">contact@paccsolutions.com</a></li>
               <li className="text-white/70">Mon-Fri: 9:00 AM - 5:00 PM</li>
               <li className="text-white/70">Sat-Sun: Closed (Emergency services available)</li>

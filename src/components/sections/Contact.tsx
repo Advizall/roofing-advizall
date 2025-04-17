@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
@@ -249,7 +248,7 @@ const Contact = () => {
                   <Phone className="h-6 w-6 text-gold mt-1 mr-4" />
                   <div>
                     <h4 className="font-medium mb-1">Phone</h4>
-                    <p className="text-white/80">(612) 555-7890</p>
+                    <p className="text-white/80">(877) 350-1690</p>
                   </div>
                 </div>
                 

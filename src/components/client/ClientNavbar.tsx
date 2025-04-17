@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { LogOut, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
@@ -53,7 +53,9 @@ const ClientNavbar = () => {
     <nav className="bg-navy-200 border-b border-gold/20 py-4 px-6">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions" className="h-16" />
+          <Link to="/">
+            <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions" className="h-16" />
+          </Link>
           <span className="text-gold ml-4 font-semibold hidden md:inline-block">
             Client Dashboard
           </span>
