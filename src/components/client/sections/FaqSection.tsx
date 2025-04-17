@@ -23,22 +23,22 @@ const FaqSection: React.FC = () => {
     {
       id: 'faq-2',
       question: 'What happens if it rains during my roof installation?',
-      answer: 'Our team closely monitors weather forecasts and plans accordingly. If unexpected rain occurs, we'll secure any exposed areas with waterproof tarps to protect your home. We'll resume work as soon as conditions are safe, typically when the roof surface is dry enough for proper material adhesion.'
+      answer: "Our team closely monitors weather forecasts and plans accordingly. If unexpected rain occurs, we'll secure any exposed areas with waterproof tarps to protect your home. We'll resume work as soon as conditions are safe, typically when the roof surface is dry enough for proper material adhesion."
     },
     {
       id: 'faq-3',
       question: 'How will I know when my project is scheduled?',
-      answer: 'You'll receive notification through your client portal when your project is scheduled. We'll also send an email confirmation with the date and approximate start time. The day before your project begins, your project manager will contact you to confirm details.'
+      answer: "You'll receive notification through your client portal when your project is scheduled. We'll also send an email confirmation with the date and approximate start time. The day before your project begins, your project manager will contact you to confirm details."
     },
     {
       id: 'faq-4',
       question: 'Do I need to be home during the installation?',
-      answer: 'While it's not absolutely necessary for you to be home during the entire installation, we recommend being present at the start of the project to meet with the project manager and discuss any last-minute questions. If you can't be home, we can make arrangements for remote communication.'
+      answer: "While it's not absolutely necessary for you to be home during the entire installation, we recommend being present at the start of the project to meet with the project manager and discuss any last-minute questions. If you can't be home, we can make arrangements for remote communication."
     },
     {
       id: 'faq-5',
       question: 'What if additional repairs are needed once work begins?',
-      answer: 'If our team discovers issues that weren't visible during the initial inspection (such as damaged decking beneath the shingles), your project manager will document the problem with photos, explain the necessary repairs, and provide a clear estimate for the additional work before proceeding.'
+      answer: "If our team discovers issues that weren't visible during the initial inspection (such as damaged decking beneath the shingles), your project manager will document the problem with photos, explain the necessary repairs, and provide a clear estimate for the additional work before proceeding."
     },
     {
       id: 'faq-6',
@@ -48,7 +48,7 @@ const FaqSection: React.FC = () => {
     {
       id: 'faq-7',
       question: 'What happens during the final inspection?',
-      answer: 'During the final inspection, your project manager will thoroughly examine all aspects of the installation, ensure all work meets our quality standards, and clean up the work area. You'll be invited to join this inspection to ask questions and confirm your satisfaction before the project is considered complete.'
+      answer: "During the final inspection, your project manager will thoroughly examine all aspects of the installation, ensure all work meets our quality standards, and clean up the work area. You'll be invited to join this inspection to ask questions and confirm your satisfaction before the project is considered complete."
     },
     {
       id: 'faq-8',
