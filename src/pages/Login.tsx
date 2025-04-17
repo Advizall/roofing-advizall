@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -21,7 +20,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Check if user is already logged in
   useEffect(() => {
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
@@ -52,7 +50,6 @@ const Login = () => {
         variant: "default",
       });
       
-      // Redirect to client dashboard after successful login
       navigate('/client-dashboard');
       
     } catch (err: any) {
@@ -140,20 +137,16 @@ const Login = () => {
                 
                 <Button 
                   type="submit" 
-                  className="w-full bg-gold hover:bg-gold-400 text-navy-500 font-medium"
+                  className="w-full bg-gold hover:bg-gold-400 text-navy-500 font-medium group transition-all duration-300 ease-in-out"
                   disabled={isLoading}
                 >
-                  {isLoading ? (
-                    <span className="flex items-center gap-2">
-                      <span className="h-4 w-4 border-2 border-navy-500 border-t-transparent rounded-full animate-spin"></span>
-                      Logging in...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <LogIn size={18} />
-                      Sign In
-                    </span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    <LogIn 
+                      size={20} 
+                      className="transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110"
+                    />
+                    <span>{isLoading ? 'Logging in...' : 'Sign In'}</span>
+                  </div>
                 </Button>
               </form>
             </CardContent>
