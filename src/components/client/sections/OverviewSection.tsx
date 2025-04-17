@@ -85,7 +85,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ clientName, profile }
             {unreadMessages > 0 ? (
               <div className="flex items-center justify-between">
                 <span>
-                  You have {unreadMessages} unread {unreadMessages === 1 ? 'message' : 'messages'}
+                  You have {unreadMessages} unread {Number(unreadMessages) === 1 ? 'message' : 'messages'}
                 </span>
                 <a 
                   href="#" 
