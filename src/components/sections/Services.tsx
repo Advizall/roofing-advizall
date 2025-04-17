@@ -1,6 +1,6 @@
 
 import ServiceCard from '../ui/ServiceCard';
-import { Clipboard, FileText, Home, Building, Phone } from 'lucide-react';
+import { Clipboard, FileText, Home, Building, Phone, Sun } from 'lucide-react';
 
 const Services = () => {
   const servicesList = [
@@ -28,6 +28,11 @@ const Services = () => {
       icon: Phone,
       title: "24/7 Emergency Response",
       description: "Immediate assistance following storm damage, including temporary repairs to prevent further damage to your property."
+    },
+    {
+      icon: Sun,
+      title: "Solar Panel Solutions",
+      description: "Specialized installation and repair of solar panel systems on new or existing roofs, maximizing energy efficiency for your home."
     }
   ];
 
