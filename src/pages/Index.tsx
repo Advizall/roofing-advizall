@@ -8,6 +8,7 @@ import HowItWorks from '../components/sections/HowItWorks';
 import Testimonials from '../components/sections/Testimonials';
 import Contact from '../components/sections/Contact';
 import Footer from '../components/Footer';
+import ChatWidget from '../components/chat/ChatWidget';
 
 const Index = () => {
   useEffect(() => {
@@ -55,6 +56,7 @@ const Index = () => {
       <Testimonials />
       <Contact />
       <Footer />
+      <ChatWidget />
     </div>
   );
 };
