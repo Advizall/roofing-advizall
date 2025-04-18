@@ -56,6 +56,7 @@ export type Database = {
       }
       contact_submissions: {
         Row: {
+          checkbox: boolean | null
           created_at: string
           email: string
           id: string
@@ -64,6 +65,7 @@ export type Database = {
           phone: string
         }
         Insert: {
+          checkbox?: boolean | null
           created_at?: string
           email: string
           id?: string
@@ -72,6 +74,7 @@ export type Database = {
           phone: string
         }
         Update: {
+          checkbox?: boolean | null
           created_at?: string
           email?: string
           id?: string

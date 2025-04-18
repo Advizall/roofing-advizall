@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
@@ -19,7 +18,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SMSTermsDialog } from "../SMSTermsDialog";
 
-// Schema validation using zod
 const formSchema = z.object({
   name: z.string()
     .min(5, "Nome deve ter pelo menos 5 caracteres")
@@ -73,7 +71,8 @@ export const ContactForm = () => {
         name: values.name,
         email: values.email,
         phone: values.phone,
-        message: values.message
+        message: values.message,
+        checkbox: smsConsent
       });
 
       if (error) {
