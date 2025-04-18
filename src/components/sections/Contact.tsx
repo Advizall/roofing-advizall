@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
@@ -72,10 +73,14 @@ const Contact = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('contact_submissions').insert([{
-        ...values,
-        smsConsent
-      }]);
+      // Store smsConsent state in a variable but don't include it in the DB insert
+      // (Until we update the database schema)
+      console.log("SMS Consent status:", smsConsent);
+      
+      const { error } = await supabase.from('contact_submissions').insert({
+        ...values
+        // smsConsent is not included since it's not in the database schema
+      });
 
       if (error) {
         console.error('Error submitting form:', error);
