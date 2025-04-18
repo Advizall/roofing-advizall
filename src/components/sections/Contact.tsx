@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { SMSTermsDialog } from "./SMSTermsDialog";
 
 // Schema de validação usando zod
 const formSchema = z.object({
@@ -36,6 +38,7 @@ const formSchema = z.object({
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [smsConsent, setSmsConsent] = useState(false);
   
   // Inicializar o formulário com react-hook-form e zod
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,10 +73,8 @@ const Contact = () => {
     setIsSubmitting(true);
     try {
       const { error } = await supabase.from('contact_submissions').insert([{
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        message: values.message
+        ...values,
+        smsConsent
       }]);
 
       if (error) {
@@ -87,6 +88,7 @@ const Contact = () => {
         console.log('Form submitted successfully');
         setSubmitted(true);
         form.reset();
+        setSmsConsent(false);
         setTimeout(() => setSubmitted(false), 5000);
       }
     } catch (error) {
@@ -211,6 +213,21 @@ const Contact = () => {
                     )}
                   />
                   
+                  <div className="flex items-start space-x-3 mt-4">
+                    <Checkbox
+                      id="sms-consent"
+                      checked={smsConsent}
+                      onCheckedChange={(checked) => setSmsConsent(checked as boolean)}
+                      className="mt-1"
+                    />
+                    <label
+                      htmlFor="sms-consent"
+                      className="text-sm text-white/80 leading-tight"
+                    >
+                      By checking this box, you agree to receive conversational text messages from PACC Solutions LLC / PACC Building Group. You may reply STOP to opt out at any time. Reply HELP for assistance. Message and data rates may apply. Messaging frequency will vary. <SMSTermsDialog />
+                    </label>
+                  </div>
+
                   <div className="mt-auto pt-4">
                     <button 
                       type="submit" 
@@ -219,10 +236,6 @@ const Contact = () => {
                     >
                       {isSubmitting ? 'Submitting...' : 'Get a Free Inspection'}
                     </button>
-                    
-                    <p className="text-white/60 text-sm text-center mt-4">
-                      By submitting this form, you agree to be contacted regarding our services.
-                    </p>
                   </div>
                 </form>
               </Form>
