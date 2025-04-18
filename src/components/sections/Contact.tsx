@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
@@ -77,9 +76,12 @@ const Contact = () => {
       // (Until we update the database schema)
       console.log("SMS Consent status:", smsConsent);
       
+      // Make sure we pass the required non-optional fields to match database requirements
       const { error } = await supabase.from('contact_submissions').insert({
-        ...values
-        // smsConsent is not included since it's not in the database schema
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        message: values.message
       });
 
       if (error) {
