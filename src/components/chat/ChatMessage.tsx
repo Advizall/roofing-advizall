@@ -1,7 +1,7 @@
 
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
-import type { Message } from './ChatWidget';
+import type { Message } from '@/types/chat';
 
 interface ChatMessageProps {
   message: Message;
