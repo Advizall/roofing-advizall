@@ -1,9 +1,10 @@
-
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, X, Minimize2, ChevronDown, ChevronUp } from 'lucide-react';
+import { MessageCircle, Send, X, Minimize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ChatMessage from './ChatMessage';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/use-toast';
 
 export type Message = {
   id: string;
@@ -17,13 +18,14 @@ const ChatWidget = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Hello! How can I help you today?',
+      content: 'Hello! I\'m Jasmin, how can I help you today?',
       sender: 'assistant',
       timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [threadId, setThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -31,7 +33,7 @@ const ChatWidget = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
 
     // Add user message
@@ -46,17 +48,40 @@ const ChatWidget = () => {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate assistant response after delay
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke('chat-with-assistant', {
+        body: {
+          message: inputValue,
+          threadId: threadId,
+        },
+      });
+
+      if (error) throw error;
+
+      // Store threadId for conversation continuity
+      if (data.threadId) {
+        setThreadId(data.threadId);
+      }
+
+      // Add assistant's response
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: "Thank you for your message. Our team will get back to you shortly.",
+        content: data.response,
         sender: 'assistant',
         timestamp: new Date(),
       };
+
       setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -92,7 +117,7 @@ const ChatWidget = () => {
         <div className="px-4 py-3 bg-navy-300 border-b border-white/10 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-gold animate-pulse"></div>
-            <h3 className="text-gold font-semibold">HomeGuardian Assistant</h3>
+            <h3 className="text-gold font-semibold">Jasmin</h3>
           </div>
           <div className="flex items-center gap-1">
             <button
