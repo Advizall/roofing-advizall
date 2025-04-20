@@ -54,6 +54,68 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_conversations: {
+        Row: {
+          created_at: string | null
+          id: string
+          thread_id: string
+          updated_at: string | null
+          user_email: string | null
+          user_name: string | null
+          user_phone: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          thread_id: string
+          updated_at?: string | null
+          user_email?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          thread_id?: string
+          updated_at?: string | null
+          user_email?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          conversation_id: string | null
+          created_at: string | null
+          id: string
+          sender: string
+        }
+        Insert: {
+          content: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          sender: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          sender?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           checkbox: boolean | null

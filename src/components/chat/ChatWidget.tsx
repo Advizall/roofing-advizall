@@ -14,19 +14,12 @@ export type Message = {
   timestamp: Date;
 };
 
-type UserInfo = {
-  name?: string;
-  email?: string;
-  phone?: string;
-  userId?: string;
-};
-
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Hello! I\'m Jasmin, how can I help you today?',
+      content: "Hello! I'm Jasmin, how can I help you today?",
       sender: 'assistant',
       timestamp: new Date(),
     },
@@ -34,7 +27,6 @@ const ChatWidget = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(null);
-  const [userInfo, setUserInfo] = useState<UserInfo>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -61,22 +53,15 @@ const ChatWidget = () => {
       const { data, error } = await supabase.functions.invoke('chat-with-assistant', {
         body: {
           message: inputValue,
-          threadId: threadId,
-          userInfo: userInfo,
+          threadId: threadId
         },
       });
 
       if (error) throw error;
 
-      // Store threadId for conversation continuity
       if (data.threadId) {
         setThreadId(data.threadId);
-        
-        // If we don't have a thread ID yet, save it to localStorage
-        if (!threadId) {
-          localStorage.setItem('chat_thread_id', data.threadId);
-          localStorage.setItem('chat_user_info', JSON.stringify(userInfo));
-        }
+        localStorage.setItem('chat_thread_id', data.threadId);
       }
 
       // Add assistant's response
@@ -107,22 +92,11 @@ const ChatWidget = () => {
     }
   };
 
-  // Load thread ID and user information from localStorage on start
+  // Load thread ID from localStorage on start
   useEffect(() => {
     const savedThreadId = localStorage.getItem('chat_thread_id');
-    const savedUserInfo = localStorage.getItem('chat_user_info');
-    
     if (savedThreadId) {
       setThreadId(savedThreadId);
-    }
-    
-    if (savedUserInfo) {
-      try {
-        const parsedUserInfo = JSON.parse(savedUserInfo);
-        setUserInfo(parsedUserInfo);
-      } catch (e) {
-        console.error('Error parsing saved user info:', e);
-      }
     }
   }, []);
 
