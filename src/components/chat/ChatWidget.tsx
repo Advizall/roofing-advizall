@@ -1,10 +1,12 @@
+
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, X, Minimize2 } from 'lucide-react';
+import { MessageCircle, Send, X, Minimize2, User, Mail, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ChatMessage from './ChatMessage';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
+import { Input } from '@/components/ui/input';
 
 export type Message = {
   id: string;
@@ -13,12 +15,21 @@ export type Message = {
   timestamp: Date;
 };
 
+type UserInfo = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  userId?: string;
+};
+
+type ChatStage = 'intro' | 'collectInfo' | 'chat';
+
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Hello! I\'m Jasmin, how can I help you today?',
+      content: 'Olá! Sou Jasmin, como posso ajudar você hoje?',
       sender: 'assistant',
       timestamp: new Date(),
     },
@@ -26,11 +37,49 @@ const ChatWidget = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(null);
+  const [chatStage, setChatStage] = useState<ChatStage>('intro');
+  const [userInfo, setUserInfo] = useState<UserInfo>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleChatStart = () => {
+    setChatStage('collectInfo');
+    setMessages((prev) => [...prev, {
+      id: Date.now().toString(),
+      content: 'Para melhor atendê-lo, poderia nos informar alguns dados básicos? Isso nos ajudará a personalizar nossa assistência.',
+      sender: 'assistant',
+      timestamp: new Date(),
+    }]);
+  };
+
+  const handleUserInfoChange = (field: keyof UserInfo, value: string) => {
+    setUserInfo((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleInfoSubmit = () => {
+    // Validar se os campos obrigatórios foram preenchidos
+    if (!userInfo.name || !userInfo.email) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha pelo menos seu nome e email.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Adicionar mensagem de boas-vindas personalizada
+    setMessages((prev) => [...prev, {
+      id: Date.now().toString(),
+      content: `Obrigado ${userInfo.name}! Como posso ajudá-lo hoje?`,
+      sender: 'assistant',
+      timestamp: new Date(),
+    }]);
+    
+    setChatStage('chat');
   };
 
   const handleSendMessage = async () => {
@@ -53,6 +102,7 @@ const ChatWidget = () => {
         body: {
           message: inputValue,
           threadId: threadId,
+          userInfo: userInfo,
         },
       });
 
@@ -61,6 +111,12 @@ const ChatWidget = () => {
       // Store threadId for conversation continuity
       if (data.threadId) {
         setThreadId(data.threadId);
+        
+        // Se ainda não temos um thread ID, salvar na localStorage
+        if (!threadId) {
+          localStorage.setItem('chat_thread_id', data.threadId);
+          localStorage.setItem('chat_user_info', JSON.stringify(userInfo));
+        }
       }
 
       // Add assistant's response
@@ -75,8 +131,8 @@ const ChatWidget = () => {
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
+        title: "Erro",
+        description: "Falha ao enviar mensagem. Por favor, tente novamente.",
         variant: "destructive",
       });
     } finally {
@@ -91,6 +147,30 @@ const ChatWidget = () => {
     }
   };
 
+  // Carregar thread ID e informações do usuário do localStorage ao iniciar
+  useEffect(() => {
+    const savedThreadId = localStorage.getItem('chat_thread_id');
+    const savedUserInfo = localStorage.getItem('chat_user_info');
+    
+    if (savedThreadId) {
+      setThreadId(savedThreadId);
+    }
+    
+    if (savedUserInfo) {
+      try {
+        const parsedUserInfo = JSON.parse(savedUserInfo);
+        setUserInfo(parsedUserInfo);
+        
+        // Se temos informações do usuário e um thread ID salvo, pular para o chat
+        if (savedThreadId) {
+          setChatStage('chat');
+        }
+      } catch (e) {
+        console.error('Error parsing saved user info:', e);
+      }
+    }
+  }, []);
+
   // Scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -101,7 +181,7 @@ const ChatWidget = () => {
     if (isOpen) {
       inputRef.current?.focus();
     }
-  }, [isOpen]);
+  }, [isOpen, chatStage]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
@@ -147,27 +227,82 @@ const ChatWidget = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Area */}
+        {/* Input Area / User Info Form */}
         <div className="p-3 bg-navy-300 border-t border-white/10">
-          <div className="flex items-center gap-2">
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="Type your message..."
-              className="flex-1 bg-navy-200 border border-white/10 rounded-full px-4 py-2 text-white outline-none focus:ring-1 focus:ring-gold focus:border-gold"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-            <Button
-              onClick={handleSendMessage}
-              disabled={inputValue.trim() === ''}
-              className="rounded-full p-2 bg-gold text-navy hover:bg-gold-400 transition-colors"
-              aria-label="Send message"
+          {chatStage === 'intro' && (
+            <Button 
+              onClick={handleChatStart}
+              className="w-full bg-gold text-navy hover:bg-gold-400 transition-colors"
             >
-              <Send size={18} />
+              Iniciar Conversa
             </Button>
-          </div>
+          )}
+
+          {chatStage === 'collectInfo' && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <User size={18} className="text-white/70" />
+                <Input
+                  type="text"
+                  placeholder="Seu nome *"
+                  className="flex-1 bg-navy-200 border border-white/10 rounded-md px-3 py-1.5 text-white text-sm outline-none focus:ring-1 focus:ring-gold focus:border-gold"
+                  value={userInfo.name || ''}
+                  onChange={(e) => handleUserInfoChange('name', e.target.value)}
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Mail size={18} className="text-white/70" />
+                <Input
+                  type="email"
+                  placeholder="Seu email *"
+                  className="flex-1 bg-navy-200 border border-white/10 rounded-md px-3 py-1.5 text-white text-sm outline-none focus:ring-1 focus:ring-gold focus:border-gold"
+                  value={userInfo.email || ''}
+                  onChange={(e) => handleUserInfoChange('email', e.target.value)}
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Phone size={18} className="text-white/70" />
+                <Input
+                  type="tel"
+                  placeholder="Seu telefone (opcional)"
+                  className="flex-1 bg-navy-200 border border-white/10 rounded-md px-3 py-1.5 text-white text-sm outline-none focus:ring-1 focus:ring-gold focus:border-gold"
+                  value={userInfo.phone || ''}
+                  onChange={(e) => handleUserInfoChange('phone', e.target.value)}
+                />
+              </div>
+
+              <Button 
+                onClick={handleInfoSubmit}
+                className="w-full mt-1 bg-gold text-navy hover:bg-gold-400 transition-colors"
+              >
+                Continuar
+              </Button>
+            </div>
+          )}
+
+          {chatStage === 'chat' && (
+            <div className="flex items-center gap-2">
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Digite sua mensagem..."
+                className="flex-1 bg-navy-200 border border-white/10 rounded-full px-4 py-2 text-white outline-none focus:ring-1 focus:ring-gold focus:border-gold"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <Button
+                onClick={handleSendMessage}
+                disabled={inputValue.trim() === ''}
+                className="rounded-full p-2 bg-gold text-navy hover:bg-gold-400 transition-colors"
+                aria-label="Send message"
+              >
+                <Send size={18} />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 

@@ -18,11 +18,21 @@ serve(async (req) => {
   }
 
   try {
-    const { message, threadId } = await req.json()
+    const { message, threadId, userInfo } = await req.json()
     
     let thread
     if (!threadId) {
-      thread = await openai.beta.threads.create()
+      // Create a new thread, optionally with metadata about the user
+      const metadata = userInfo ? {
+        user_id: userInfo.userId || 'anonymous',
+        name: userInfo.name || undefined,
+        email: userInfo.email || undefined,
+        phone: userInfo.phone || undefined
+      } : undefined;
+      
+      thread = await openai.beta.threads.create({
+        metadata
+      })
     } else {
       thread = { id: threadId }
     }
