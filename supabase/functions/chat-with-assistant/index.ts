@@ -25,16 +25,15 @@ serve(async (req) => {
   try {
     const { message, threadId, userInfo } = await req.json()
     
-    // Use the v2 Assistants API by setting the proper header
-    openai.baseOptions.headers = {
-      ...openai.baseOptions.headers,
-      'OpenAI-Beta': 'assistants=v2'
-    }
+    // Set the header explicitly for Assistants v2
+    const customHeaders = { 'OpenAI-Beta': 'assistants=v2' }
     
     let thread, conversationId
     if (!threadId) {
-      // Create a new thread and conversation record
-      thread = await openai.beta.threads.create()
+      // Create a new thread
+      thread = await openai.beta.threads.create({}, {
+        headers: customHeaders
+      })
       
       const { data: conversation, error: conversationError } = await supabase
         .from('chat_conversations')
@@ -74,38 +73,55 @@ serve(async (req) => {
     await openai.beta.threads.messages.create(thread.id, {
       role: "user",
       content: message,
+    }, {
+      headers: customHeaders
     })
 
     // Run the assistant
     const run = await openai.beta.threads.runs.create(thread.id, {
       assistant_id: "asst_9fA8QCJtaSVQ05HNfpTs6IjZ",
+    }, {
+      headers: customHeaders
     })
 
     // Poll for the run completion
     let assistantResponse = null
-    while (!assistantResponse) {
-      const runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id)
+    let attempts = 0
+    const maxAttempts = 30 // Timeout after ~30 seconds
+    
+    while (!assistantResponse && attempts < maxAttempts) {
+      attempts++
+      const runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id, {
+        headers: customHeaders
+      })
       
       if (runStatus.status === 'completed') {
-        const messages = await openai.beta.threads.messages.list(thread.id)
-        assistantResponse = messages.data[0].content[0].text.value
-        
-        // Store assistant message
-        await supabase
-          .from('chat_messages')
-          .insert([{
-            conversation_id: conversationId,
-            content: assistantResponse,
-            sender: 'assistant'
-          }])
-        
+        const messages = await openai.beta.threads.messages.list(thread.id, {
+          headers: customHeaders
+        })
+        if (messages.data.length > 0 && messages.data[0].content.length > 0) {
+          assistantResponse = messages.data[0].content[0].text.value
+          
+          // Store assistant message
+          await supabase
+            .from('chat_messages')
+            .insert([{
+              conversation_id: conversationId,
+              content: assistantResponse,
+              sender: 'assistant'
+            }])
+        }
         break
-      } else if (runStatus.status === 'failed') {
-        throw new Error('Assistant failed to respond')
+      } else if (runStatus.status === 'failed' || runStatus.status === 'cancelled') {
+        throw new Error(`Assistant run ${runStatus.status}: ${runStatus.last_error?.message || 'Unknown error'}`)
       }
       
       // Wait before polling again
       await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+    
+    if (!assistantResponse) {
+      throw new Error('Assistant response timeout or no content returned')
     }
     
     return new Response(JSON.stringify({
