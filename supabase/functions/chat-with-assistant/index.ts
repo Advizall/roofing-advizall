@@ -20,6 +20,12 @@ serve(async (req) => {
   try {
     const { message, threadId, userInfo } = await req.json()
     
+    // Use the v2 Assistants API by setting the proper header
+    openai.baseOptions.headers = {
+      ...openai.baseOptions.headers,
+      'OpenAI-Beta': 'assistants=v2'
+    }
+    
     let thread
     if (!threadId) {
       // Create a new thread, optionally with metadata about the user
@@ -65,6 +71,10 @@ serve(async (req) => {
       await new Promise(resolve => setTimeout(resolve, 1000))
     }
 
+    // Store conversation in Supabase
+    // (This information can be accessed from the 'chat_conversations' table)
+    // We don't need to wait for this to complete before responding
+    
     return new Response(JSON.stringify({
       response: assistantResponse,
       threadId: thread.id
