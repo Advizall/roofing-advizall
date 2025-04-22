@@ -8,7 +8,7 @@ export const useChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: "👋 Welcome to PACC Solutions! I'm here to help with any questions about your roofing project. Whether you need an estimate, want to discuss our services, or have questions about our process - I'm here to assist you.",
+      content: "Need help with your roof? I'm here to assist!",
       sender: 'assistant',
       timestamp: new Date(),
     },

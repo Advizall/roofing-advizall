@@ -25,8 +25,8 @@ const ChatWidget = () => {
 
       {!isOpen && (
         <div className="mb-4 mr-2 animate-fade-in">
-          <div className="bg-navy-300 text-gold px-4 py-2 rounded-lg shadow-gold text-sm max-w-[200px]">
-            Have questions about your roofing project? Let's chat!
+          <div className="bg-navy-300 text-gold px-4 py-2 rounded-lg shadow-gold text-sm max-w-[220px] font-medium">
+            Questions about your roofing project? Chat with us!
           </div>
         </div>
       )}
