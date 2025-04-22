@@ -12,6 +12,14 @@ import {
   MapPin, 
   CalendarIcon 
 } from 'lucide-react';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from '@/components/ui/sidebar';
 
 interface ClientSidebarProps {
   activeSection: string;
@@ -36,31 +44,29 @@ const ClientSidebar: React.FC<ClientSidebarProps> = ({
   ];
 
   return (
-    <div className="w-full md:w-64 bg-navy-300 border-r border-gold/20">
-      <div className="p-4">
-        <h2 className="text-gold font-semibold mb-6 pl-2">Client Portal</h2>
-        
-        <div className="space-y-1">
+    <Sidebar>
+      <SidebarHeader className="p-4">
+        <h2 className="text-gold font-semibold">Client Portal</h2>
+      </SidebarHeader>
+      
+      <SidebarContent>
+        <SidebarMenu>
           {menuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveSection(item.id)}
-              className={`
-                w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm 
-                ${activeSection === item.id 
-                  ? 'bg-gold/20 text-white font-medium' 
-                  : 'text-white/70 hover:text-white hover:bg-navy-200'
-                }
-                transition-colors
-              `}
-            >
-              <item.icon size={18} className={activeSection === item.id ? 'text-gold' : ''} />
-              <span>{item.label}</span>
-            </button>
+            <SidebarMenuItem key={item.id}>
+              <SidebarMenuButton
+                isActive={activeSection === item.id}
+                onClick={() => setActiveSection(item.id)}
+                tooltip={item.label}
+                className="w-full"
+              >
+                <item.icon className="h-5 w-5" />
+                <span>{item.label}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           ))}
-        </div>
-      </div>
-    </div>
+        </SidebarMenu>
+      </SidebarContent>
+    </Sidebar>
   );
 };
 
