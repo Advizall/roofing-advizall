@@ -95,7 +95,7 @@ export const SidebarInput = React.forwardRef<
       ref={ref}
       data-sidebar="input"
       className={cn(
-        "h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+        "h-9 w-full bg-navy/20 border-white/10 shadow-none focus-visible:ring-2 focus-visible:ring-gold/50",
         className
       )}
       {...props}
@@ -112,7 +112,7 @@ export const SidebarHeader = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2 p-3", className)}
       {...props}
     />
   )
@@ -142,7 +142,7 @@ export const SidebarSeparator = React.forwardRef<
     <Separator
       ref={ref}
       data-sidebar="separator"
-      className={cn("mx-2 w-auto bg-sidebar-border", className)}
+      className={cn("mx-3 w-auto bg-white/10", className)}
       {...props}
     />
   )
