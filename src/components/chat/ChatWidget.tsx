@@ -23,11 +23,19 @@ const ChatWidget = () => {
         onSendMessage={sendMessage}
       />
 
+      {!isOpen && (
+        <div className="mb-4 mr-2 animate-fade-in">
+          <div className="bg-navy-300 text-gold px-4 py-2 rounded-lg shadow-gold text-sm max-w-[200px]">
+            Have questions about your roofing project? Let's chat!
+          </div>
+        </div>
+      )}
+
       <button
         onClick={toggleChat}
         className={cn(
           "flex items-center justify-center w-14 h-14 rounded-full bg-gold hover:bg-gold-400 transition-all duration-300 shadow-lg hover:shadow-gold",
-          isOpen ? "rotate-180" : "animate-pulse-gentle"
+          isOpen ? "rotate-180" : "animate-bounce"
         )}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
