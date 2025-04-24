@@ -100,7 +100,7 @@ export const SidebarMenuButton = React.forwardRef<
           side="right"
           align="center"
           hidden={state !== "collapsed" || isMobile}
-          className="bg-navy/90 text-gold border-gold/20 backdrop-blur-sm"
+          className="bg-navy text-gold border-gold/20"
           {...(typeof tooltip === "string" ? { children: tooltip } : tooltip)}
         />
       </Tooltip>

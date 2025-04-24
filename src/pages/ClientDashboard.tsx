@@ -34,7 +34,7 @@ const ClientDashboard = () => {
             setActiveSection={setActiveSection} 
           />
           
-          <main className="flex-1">
+          <main className="flex-1 ml-[16rem] md:ml-[16rem]">
             <ClientContent 
               activeSection={activeSection} 
             />

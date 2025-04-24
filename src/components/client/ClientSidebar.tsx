@@ -44,7 +44,7 @@ const ClientSidebar: React.FC<ClientSidebarProps> = ({
   ];
 
   return (
-    <Sidebar>
+    <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeader className="p-4">
         <h2 className="text-gold font-semibold">Client Portal</h2>
       </SidebarHeader>
