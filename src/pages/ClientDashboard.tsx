@@ -28,7 +28,7 @@ const ClientDashboard = () => {
       <ClientNavbar />
       
       <SidebarProvider defaultOpen={true}>
-        <div className="flex-grow flex w-full">
+        <div className="flex-grow flex w-full mt-[88px]">
           <ClientSidebar 
             activeSection={activeSection} 
             setActiveSection={setActiveSection} 
