@@ -7,6 +7,7 @@ import { useChat } from '@/hooks/use-chat';
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showSuggestion, setShowSuggestion] = useState(true);
   const { messages, isTyping, sendMessage } = useChat();
 
   const toggleChat = () => {
@@ -23,9 +24,16 @@ const ChatWidget = () => {
         onSendMessage={sendMessage}
       />
 
-      {!isOpen && (
-        <div className="mb-4 mr-2 animate-fade-in">
-          <div className="bg-navy-300 text-gold px-4 py-2 rounded-lg shadow-gold text-sm max-w-[220px] font-medium">
+      {!isOpen && showSuggestion && (
+        <div className="mb-4 mr-2 animate-fade-in relative">
+          <button 
+            onClick={() => setShowSuggestion(false)}
+            className="absolute top-1 left-1 text-white/40 hover:text-white/60 transition-colors duration-200 rounded-full"
+            aria-label="Close suggestion"
+          >
+            <X size={16} />
+          </button>
+          <div className="bg-navy-300 text-gold pl-6 pr-4 py-2 rounded-lg shadow-gold text-sm max-w-[220px] font-medium">
             Questions about your roofing project? Chat with us!
           </div>
         </div>
