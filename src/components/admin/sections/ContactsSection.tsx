@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Check, Loader2 } from 'lucide-react'; // Updated import to include Check
+import { Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
@@ -138,7 +138,7 @@ const ContactsSection = () => {
                     <TableCell>
                       {submission.contacted ? (
                         <span className="inline-flex items-center rounded-full bg-green-800/20 px-2 py-1 text-xs font-medium text-green-400">
-                          <CheckIcon className="mr-1 h-3 w-3" />
+                          <Check className="mr-1 h-3 w-3" /> {/* Changed from CheckIcon to Check */}
                           Contacted
                         </span>
                       ) : (
