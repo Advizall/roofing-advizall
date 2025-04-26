@@ -1,12 +1,14 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogOut, Menu } from 'lucide-react';
+import { LogOut, Menu, UserCog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const ClientNavbar = () => {
   const [userName, setUserName] = useState('Client');
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,12 +20,13 @@ const ClientNavbar = () => {
       if (session?.user) {
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('full_name, username')
+          .select('full_name, username, role')
           .eq('id', session.user.id)
           .single();
           
         if (profileData) {
           setUserName(profileData.full_name || profileData.username || 'Client');
+          setIsAdmin(profileData.role === 'admin');
         }
       }
     };
@@ -66,6 +69,18 @@ const ClientNavbar = () => {
             <span>Welcome, {userName}</span>
           </div>
           
+          {isAdmin && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate('/admin-dashboard')} 
+              className="border-gold/30 text-gold hover:bg-gold/10 hover:text-white"
+            >
+              <UserCog size={16} className="mr-2" />
+              Admin
+            </Button>
+          )}
+          
           <Button 
             variant="outline" 
             size="sm" 
@@ -90,6 +105,18 @@ const ClientNavbar = () => {
           <div className="flex items-center text-white">
             <span>Welcome, {userName}</span>
           </div>
+          
+          {isAdmin && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate('/admin-dashboard')} 
+              className="border-gold/30 text-gold hover:bg-gold/10 hover:text-white w-full"
+            >
+              <UserCog size={16} className="mr-2" />
+              Admin
+            </Button>
+          )}
           
           <Button 
             variant="outline" 
