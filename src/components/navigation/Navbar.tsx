@@ -60,7 +60,7 @@ const Navbar = () => {
               </a>)}
             <Link 
               to="/login" 
-              className="nav-link ml-4 flex items-center gap-2 bg-gold/10 hover:bg-gold/20 px-4 py-2 rounded-md text-gold transition-all duration-300 group"
+              className="nav-link ml-4 flex items-center gap-2 bg-gold/10 hover:bg-gold/20 px-4 py-2 rounded-md text-gold transition-all duration-300 group whitespace-nowrap"
             >
               <LogIn 
                 size={16} 
@@ -68,7 +68,7 @@ const Navbar = () => {
               />
               Login
             </Link>
-            <a href="#contact" className="btn-primary ml-4">
+            <a href="#contact" className="btn-primary ml-4 whitespace-nowrap w-[180px] text-center">
               Get a Free Inspection
             </a>
           </nav>
@@ -98,7 +98,7 @@ const Navbar = () => {
                 />
                 Login
               </Link>
-              <a href="#contact" className="btn-primary text-center mt-4" onClick={() => setIsMobileMenuOpen(false)}>
+              <a href="#contact" className="btn-primary text-center w-[180px] mx-auto" onClick={() => setIsMobileMenuOpen(false)}>
                 Get a Free Inspection
               </a>
             </nav>
