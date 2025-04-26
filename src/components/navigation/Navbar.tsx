@@ -54,7 +54,7 @@ const Navbar = () => {
           </a>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-8">
             {navLinks.map(link => <a key={link.name} href={link.href} className="nav-link">
                 {link.name}
               </a>)}
@@ -68,20 +68,20 @@ const Navbar = () => {
               />
               Login
             </Link>
-            <a href="#contact" className="btn-primary ml-4 whitespace-nowrap w-[180px] text-center">
-              Get a Free Inspection
+            <a href="#contact" className="btn-primary ml-4 w-[160px] text-center py-2">
+              Free Inspection
             </a>
           </nav>
           
           {/* Mobile Menu Button */}
-          <button className="md:hidden text-white focus:outline-none" onClick={toggleMobileMenu}>
+          <button className="lg:hidden text-white focus:outline-none" onClick={toggleMobileMenu}>
             {isMobileMenuOpen ? <X size={28} className="text-gold" /> : <Menu size={28} />}
           </button>
         </div>
       </div>
       
       {/* Mobile Menu */}
-      {isMobileMenuOpen && <div className="md:hidden bg-navy-300/95 backdrop-blur-lg">
+      {isMobileMenuOpen && <div className="lg:hidden bg-navy-300/95 backdrop-blur-lg">
           <div className="container mx-auto px-6 py-4">
             <nav className="flex flex-col space-y-4">
               {navLinks.map(link => <a key={link.name} href={link.href} className="text-white hover:text-gold py-2 text-lg font-medium transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
@@ -98,8 +98,8 @@ const Navbar = () => {
                 />
                 Login
               </Link>
-              <a href="#contact" className="btn-primary text-center w-[180px] mx-auto" onClick={() => setIsMobileMenuOpen(false)}>
-                Get a Free Inspection
+              <a href="#contact" className="btn-primary text-center py-2 w-[160px] mx-auto" onClick={() => setIsMobileMenuOpen(false)}>
+                Free Inspection
               </a>
             </nav>
           </div>
@@ -108,4 +108,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
