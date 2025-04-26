@@ -15,6 +15,7 @@ interface ContactSubmission {
   message: string;
   created_at: string;
   contacted: boolean;
+  checkbox?: boolean; // Optional field
 }
 
 const ContactsSection = () => {
@@ -36,7 +37,14 @@ const ContactsSection = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setSubmissions(data || []);
+      
+      // Add a default value for 'contacted' if it doesn't exist
+      const submissionsWithDefaults = (data || []).map(item => ({
+        ...item,
+        contacted: item.contacted ?? false // Default to false if contacted is null/undefined
+      }));
+      
+      setSubmissions(submissionsWithDefaults);
     } catch (error) {
       console.error('Error fetching contact submissions:', error);
       toast({

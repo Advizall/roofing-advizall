@@ -13,6 +13,7 @@ interface ChatConversation {
   id: string;
   thread_id: string;
   created_at: string;
+  updated_at: string | null;
   user_name: string | null;
   user_email: string | null;
   user_phone: string | null;
@@ -22,7 +23,7 @@ interface ChatConversation {
 
 interface ChatMessage {
   id: string;
-  conversation_id: string;
+  conversation_id: string | null;
   content: string;
   sender: 'user' | 'assistant';
   created_at: string;
@@ -62,6 +63,7 @@ const ConversationsSection = () => {
 
           return {
             ...conversation,
+            contacted: conversation.contacted ?? false, // Default to false if contacted is null/undefined
             message_count: count || 0,
           };
         })
@@ -92,7 +94,16 @@ const ConversationsSection = () => {
         .order('created_at', { ascending: true });
 
       if (error) throw error;
-      setMessages(data || []);
+      
+      // Convert generic sender string to the specific union type ('user' | 'assistant')
+      const typedMessages = (data || []).map(msg => ({
+        ...msg,
+        sender: (msg.sender === 'user' || msg.sender === 'assistant') ? 
+          msg.sender as 'user' | 'assistant' : 
+          'user' // Default to 'user' if not matching our expected values
+      }));
+      
+      setMessages(typedMessages);
     } catch (error) {
       console.error('Error fetching messages:', error);
       toast({

@@ -1,11 +1,17 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, MessageSquare, UserCheck, Users } from 'lucide-react';
 
+interface DashboardStats {
+  totalContacts: number;
+  totalConversations: number;
+  uncontactedSubmissions: number;
+  uncontactedConversations: number;
+}
+
 const DashboardSection = () => {
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<DashboardStats>({
     totalContacts: 0,
     totalConversations: 0,
     uncontactedSubmissions: 0,
@@ -14,39 +20,41 @@ const DashboardSection = () => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      // Fetch total form submissions
-      const { count: contactsCount } = await supabase
-        .from('contact_submissions')
-        .select('*', { count: 'exact', head: true });
+      try {
+        // Fetch total form submissions
+        const { count: contactsCount } = await supabase
+          .from('contact_submissions')
+          .select('*', { count: 'exact', head: true });
 
-      // Fetch total conversations
-      const { count: conversationsCount } = await supabase
-        .from('chat_conversations')
-        .select('*', { count: 'exact', head: true });
+        // Fetch total conversations
+        const { count: conversationsCount } = await supabase
+          .from('chat_conversations')
+          .select('*', { count: 'exact', head: true });
 
-      // Fetch uncontacted submissions (assuming we'll add a 'contacted' column)
-      const { count: uncontactedSubmissions } = await supabase
-        .from('contact_submissions')
-        .select('*', { count: 'exact', head: true })
-        .eq('contacted', false);
+        // Fetch uncontacted submissions
+        const { count: uncontactedSubmissions } = await supabase
+          .from('contact_submissions')
+          .select('*', { count: 'exact', head: true })
+          .eq('contacted', false);
 
-      // Fetch uncontacted conversations (assuming we'll add a 'contacted' column)
-      const { count: uncontactedConversations } = await supabase
-        .from('chat_conversations')
-        .select('*', { count: 'exact', head: true })
-        .eq('contacted', false);
+        // Fetch uncontacted conversations
+        const { count: uncontactedConversations } = await supabase
+          .from('chat_conversations')
+          .select('*', { count: 'exact', head: true })
+          .eq('contacted', false);
 
-      setStats({
-        totalContacts: contactsCount || 0,
-        totalConversations: conversationsCount || 0,
-        uncontactedSubmissions: uncontactedSubmissions || 0,
-        uncontactedConversations: uncontactedConversations || 0
-      });
+        setStats({
+          totalContacts: contactsCount || 0,
+          totalConversations: conversationsCount || 0,
+          uncontactedSubmissions: uncontactedSubmissions || 0,
+          uncontactedConversations: uncontactedConversations || 0
+        });
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      }
     };
 
-    fetchStats().catch(error => {
-      console.error('Error fetching dashboard stats:', error);
-    });
+    fetchStats();
   }, []);
 
   return (

@@ -29,17 +29,22 @@ const UsersSection = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      // Get all profiles with their emails (from auth.users)
-      // This is just placeholder code as we don't have direct access to auth.users from the client
-      const { data, error } = await supabase
+      // Get all profiles
+      const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (profilesError) throw profilesError;
 
-      // In a real implementation, you might want to get the email from auth.users through a server function
-      setUsers(data || []);
+      // Since we can't directly access auth.users emails from client-side,
+      // we'll use the profiles data and add a default email placeholder
+      const profilesWithEmail = profilesData?.map(profile => ({
+        ...profile,
+        email: profile.email || `${profile.username || 'user'}@example.com` // Default email placeholder
+      })) || [];
+
+      setUsers(profilesWithEmail);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
