@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, LogIn } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -20,25 +19,32 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [{
-    name: 'Home',
-    href: '#hero'
-  }, {
-    name: 'About',
-    href: '#about'
-  }, {
-    name: 'Services',
-    href: '#services'
-  }, {
-    name: 'Process',
-    href: '#process'
-  }, {
-    name: 'Testimonials',
-    href: '#testimonials'
-  }, {
-    name: 'Contact',
-    href: '#contact'
-  }];
+  const navLinks = [
+    {
+      name: 'Home',
+      href: '#hero'
+    },
+    {
+      name: 'About',
+      href: '#about'
+    },
+    {
+      name: 'Services',
+      href: '#services'
+    },
+    {
+      name: 'Process',
+      href: '#process'
+    },
+    {
+      name: 'Testimonials',
+      href: '#testimonials'
+    },
+    {
+      name: 'Contact',
+      href: '#contact'
+    }
+  ];
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -48,16 +54,25 @@ const Navbar = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <a href="#hero" className="flex items-center">
-            <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions LLC" style={{
-            height: "76.8px"
-          }} className="h-[100.8px]" />
+            <img 
+              src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" 
+              alt="PACC Solutions LLC" 
+              style={{ height: "76.8px" }} 
+              className="h-[100.8px]" 
+            />
           </a>
           
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            {navLinks.map(link => <a key={link.name} href={link.href} className="nav-link">
+            {navLinks.map(link => (
+              <a 
+                key={link.name} 
+                href={link.href} 
+                className="nav-link"
+              >
                 {link.name}
-              </a>)}
+              </a>
+            ))}
             <Link 
               to="/login" 
               className="nav-link ml-4 flex items-center gap-2 bg-gold/10 hover:bg-gold/20 px-4 py-2 rounded-md text-gold transition-all duration-300 group whitespace-nowrap"
@@ -68,25 +83,43 @@ const Navbar = () => {
               />
               Login
             </Link>
-            <a href="#contact" className="btn-primary ml-4 w-[160px] text-center py-2">
+            <a 
+              href="#contact" 
+              className="btn-primary w-[160px] text-center py-2 whitespace-nowrap"
+            >
               Free Inspection
             </a>
           </nav>
           
           {/* Mobile Menu Button */}
-          <button className="lg:hidden text-white focus:outline-none" onClick={toggleMobileMenu}>
-            {isMobileMenuOpen ? <X size={28} className="text-gold" /> : <Menu size={28} />}
+          <button 
+            className="lg:hidden text-white focus:outline-none" 
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? (
+              <X size={28} className="text-gold" />
+            ) : (
+              <Menu size={28} />
+            )}
           </button>
         </div>
       </div>
       
       {/* Mobile Menu */}
-      {isMobileMenuOpen && <div className="lg:hidden bg-navy-300/95 backdrop-blur-lg">
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-navy-300/95 backdrop-blur-lg">
           <div className="container mx-auto px-6 py-4">
             <nav className="flex flex-col space-y-4">
-              {navLinks.map(link => <a key={link.name} href={link.href} className="text-white hover:text-gold py-2 text-lg font-medium transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+              {navLinks.map(link => (
+                <a 
+                  key={link.name} 
+                  href={link.href} 
+                  className="text-white hover:text-gold py-2 text-lg font-medium transition-colors" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   {link.name}
-                </a>)}
+                </a>
+              ))}
               <Link 
                 to="/login" 
                 className="text-gold hover:bg-gold/10 py-2 text-lg font-medium transition-colors text-center flex items-center justify-center gap-2 rounded-md" 
@@ -98,12 +131,17 @@ const Navbar = () => {
                 />
                 Login
               </Link>
-              <a href="#contact" className="btn-primary text-center py-2 w-[160px] mx-auto" onClick={() => setIsMobileMenuOpen(false)}>
+              <a 
+                href="#contact" 
+                className="btn-primary text-center py-2 w-[160px] mx-auto" 
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
                 Free Inspection
               </a>
             </nav>
           </div>
-        </div>}
+        </div>
+      )}
     </header>;
 };
 
