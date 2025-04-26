@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Check, Check as CheckIcon, Loader2 } from 'lucide-react';
+import { Check as CheckIcon, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
+// Update the interface to include 'contacted'
 interface ContactSubmission {
   id: string;
   name: string;
@@ -38,8 +39,8 @@ const ContactsSection = () => {
 
       if (error) throw error;
       
-      // Add a default value for 'contacted' if it doesn't exist
-      const submissionsWithDefaults = (data || []).map(item => ({
+      // Ensure 'contacted' is always a boolean
+      const submissionsWithDefaults: ContactSubmission[] = (data || []).map(item => ({
         ...item,
         contacted: item.contacted ?? false // Default to false if contacted is null/undefined
       }));

@@ -9,6 +9,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
+// Update the interface to include 'contacted'
 interface ChatConversation {
   id: string;
   thread_id: string;
@@ -21,6 +22,7 @@ interface ChatConversation {
   message_count: number;
 }
 
+// Update ChatMessage type to ensure sender is a specific union type
 interface ChatMessage {
   id: string;
   conversation_id: string | null;
@@ -54,7 +56,7 @@ const ConversationsSection = () => {
       if (conversationsError) throw conversationsError;
 
       // For each conversation, count the number of messages
-      const conversationsWithMessageCount = await Promise.all(
+      const conversationsWithMessageCount: ChatConversation[] = await Promise.all(
         (conversationsData || []).map(async (conversation) => {
           const { count, error } = await supabase
             .from('chat_messages')

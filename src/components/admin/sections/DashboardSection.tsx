@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, MessageSquare, UserCheck, Users } from 'lucide-react';
 
+// Simplified interface to avoid deep type instantiation
 interface DashboardStats {
   totalContacts: number;
   totalConversations: number;

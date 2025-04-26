@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
+// Update the interface to include email from the database column
 interface UserProfile {
   id: string;
   full_name: string | null;
@@ -14,7 +15,7 @@ interface UserProfile {
   created_at: string | null;
   updated_at: string | null;
   avatar_url: string | null;
-  email: string | null;
+  email: string | null; // Added email column
 }
 
 const UsersSection = () => {
@@ -29,7 +30,7 @@ const UsersSection = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      // Get all profiles
+      // Get all profiles with the new email column
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
@@ -37,11 +38,10 @@ const UsersSection = () => {
 
       if (profilesError) throw profilesError;
 
-      // Since we can't directly access auth.users emails from client-side,
-      // we'll use the profiles data and add a default email placeholder
-      const profilesWithEmail = profilesData?.map(profile => ({
+      // Ensure users always have an email, even if it's null
+      const profilesWithEmail: UserProfile[] = profilesData?.map(profile => ({
         ...profile,
-        email: profile.email || `${profile.username || 'user'}@example.com` // Default email placeholder
+        email: profile.email || null // Keep the email as it is from the database
       })) || [];
 
       setUsers(profilesWithEmail);

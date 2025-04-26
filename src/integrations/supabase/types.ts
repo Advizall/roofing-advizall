@@ -56,6 +56,7 @@ export type Database = {
       }
       chat_conversations: {
         Row: {
+          contacted: boolean | null
           created_at: string | null
           id: string
           thread_id: string
@@ -65,6 +66,7 @@ export type Database = {
           user_phone: string | null
         }
         Insert: {
+          contacted?: boolean | null
           created_at?: string | null
           id?: string
           thread_id: string
@@ -74,6 +76,7 @@ export type Database = {
           user_phone?: string | null
         }
         Update: {
+          contacted?: boolean | null
           created_at?: string | null
           id?: string
           thread_id?: string
@@ -119,6 +122,7 @@ export type Database = {
       contact_submissions: {
         Row: {
           checkbox: boolean | null
+          contacted: boolean | null
           created_at: string
           email: string
           id: string
@@ -128,6 +132,7 @@ export type Database = {
         }
         Insert: {
           checkbox?: boolean | null
+          contacted?: boolean | null
           created_at?: string
           email: string
           id?: string
@@ -137,6 +142,7 @@ export type Database = {
         }
         Update: {
           checkbox?: boolean | null
+          contacted?: boolean | null
           created_at?: string
           email?: string
           id?: string
@@ -189,6 +195,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string | null
+          email: string | null
           full_name: string | null
           id: string
           role: string | null
@@ -198,6 +205,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
+          email?: string | null
           full_name?: string | null
           id: string
           role?: string | null
@@ -207,6 +215,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           created_at?: string | null
+          email?: string | null
           full_name?: string | null
           id?: string
           role?: string | null
