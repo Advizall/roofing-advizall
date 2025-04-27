@@ -20,6 +20,7 @@ const UserActions: React.FC<UserActionsProps> = ({
   onDelete,
   onPromote,
 }) => {
+  // Don't show action buttons for admin users
   if (userRole === 'admin') return null;
 
   return (

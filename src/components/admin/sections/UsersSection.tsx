@@ -23,14 +23,20 @@ const UsersSection = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
+      console.log('Fetching all user profiles...');
       // Fetch all profiles without any filtering by user ID
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (profilesError) throw profilesError;
+      if (profilesError) {
+        console.error('Error in profiles fetch:', profilesError);
+        throw profilesError;
+      }
 
+      console.log('Profiles fetched:', profilesData?.length || 0, 'profiles');
+      
       const profilesWithEmail: Profile[] = profilesData?.map(profile => ({
         ...profile,
         email: profile.email || null
