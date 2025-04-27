@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
@@ -74,6 +75,8 @@ const LogsSection = () => {
         return 'Contact Deleted';
       case 'chat_deleted':
         return 'Chat Deleted';
+      case 'chat_marked_contacted':
+        return 'Chat Marked as Contacted';
       default:
         return action.replace('_', ' ');
     }
@@ -82,6 +85,7 @@ const LogsSection = () => {
   const getActionColor = (action: string) => {
     if (action.includes('deleted')) return 'bg-red-900/30 text-red-400';
     if (action.includes('created')) return 'bg-green-900/30 text-green-400';
+    if (action.includes('contacted')) return 'bg-blue-900/30 text-blue-400';
     if (action === 'role_changed') return 'bg-amber-900/30 text-amber-400';
     return 'bg-blue-900/30 text-blue-400';
   };
@@ -103,6 +107,8 @@ const LogsSection = () => {
           return `Deleted contact: ${parsedDetails.name || parsedDetails.email || 'Unknown'}`;
         case 'chat_deleted':
           return `Deleted chat from: ${parsedDetails.user_name || parsedDetails.user_email || 'Unknown'}`;
+        case 'chat_marked_contacted':
+          return `Marked chat from ${parsedDetails.user_name || parsedDetails.user_email || 'Unknown'} as contacted`;
         default:
           return JSON.stringify(parsedDetails);
       }

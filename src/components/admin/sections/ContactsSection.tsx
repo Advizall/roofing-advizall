@@ -2,25 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Check, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { formatDistanceToNow } from 'date-fns';
+import { Loader2, MailCheck, Trash2 } from 'lucide-react';
+import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { Checkbox } from '@/components/ui/checkbox';
+import { createAdminLog } from '@/utils/adminLogUtils';
 
 type ContactSubmission = Database['public']['Tables']['contact_submissions']['Row'];
-type AdminLogInsert = Database['public']['Tables']['admin_logs']['Insert'];
 
 const ContactsSection = () => {
-  const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
+  const [contacts, setContacts] = useState<ContactSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
+  const [currentAction, setCurrentAction] = useState<'contact' | 'delete' | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchSubmissions();
+    fetchContacts();
   }, []);
 
-  const fetchSubmissions = async () => {
+  const fetchContacts = async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -29,15 +30,10 @@ const ContactsSection = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      
-      const submissionsWithDefaults: ContactSubmission[] = (data || []).map(item => ({
-        ...item,
-        contacted: item.contacted ?? false
-      }));
-      
-      setSubmissions(submissionsWithDefaults);
+
+      setContacts(data || []);
     } catch (error) {
-      console.error('Error fetching contact submissions:', error);
+      console.error('Error fetching contacts:', error);
       toast({
         title: 'Error',
         description: 'Failed to fetch contact submissions',
@@ -48,49 +44,99 @@ const ContactsSection = () => {
     }
   };
 
-  const markAsContacted = async (id: string) => {
-    setProcessingId(id);
+  const handleContactedToggle = async (contact: ContactSubmission) => {
     try {
-      const submission = submissions.find(sub => sub.id === id);
-
+      setProcessingId(contact.id);
+      setCurrentAction('contact');
+      
+      // Atualizar o status de contatado
+      const newContactedStatus = !contact.contacted;
+      
       const { error } = await supabase
         .from('contact_submissions')
-        .update({ contacted: true })
-        .eq('id', id);
-
+        .update({ contacted: newContactedStatus })
+        .eq('id', contact.id);
+      
       if (error) throw error;
-
-      setSubmissions(submissions.map(submission => 
-        submission.id === id ? { ...submission, contacted: true } : submission
+      
+      // Atualizar o estado local
+      setContacts(contacts.map(c => 
+        c.id === contact.id ? { ...c, contacted: newContactedStatus } : c
       ));
-
+      
       toast({
         title: 'Success',
-        description: 'Submission marked as contacted',
+        description: newContactedStatus 
+          ? 'Contact marked as contacted' 
+          : 'Contact marked as not contacted',
       });
 
-      const adminLogData: AdminLogInsert = {
-        action: 'contact_marked_contacted',
-        performed_by: (await supabase.auth.getSession()).data.session?.user.id || '',
-        target_id: id,
-        details: JSON.stringify({ 
-          name: submission?.name,
-          email: submission?.email,
-          phone: submission?.phone
-        })
-      };
-
-      await supabase.from('admin_logs').insert(adminLogData);
-
+      // Registrar a ação nos logs de administração
+      await createAdminLog(
+        'contact_marked_contacted',
+        contact.id,
+        {
+          name: contact.name,
+          email: contact.email,
+          contacted: newContactedStatus
+        }
+      );
+      
     } catch (error) {
-      console.error('Error updating submission:', error);
+      console.error('Error toggling contact status:', error);
       toast({
         title: 'Error',
-        description: 'Failed to mark as contacted',
+        description: 'Failed to update contact status',
         variant: 'destructive',
       });
     } finally {
       setProcessingId(null);
+      setCurrentAction(null);
+    }
+  };
+
+  const handleDeleteContact = async (contactId: string) => {
+    try {
+      setProcessingId(contactId);
+      setCurrentAction('delete');
+      
+      const contactToDelete = contacts.find(contact => contact.id === contactId);
+      
+      const { error } = await supabase
+        .from('contact_submissions')
+        .delete()
+        .eq('id', contactId);
+      
+      if (error) throw error;
+      
+      // Atualizar o estado local
+      setContacts(contacts.filter(c => c.id !== contactId));
+      
+      toast({
+        title: 'Success',
+        description: 'Contact has been deleted',
+      });
+
+      // Registrar a ação nos logs de administração
+      await createAdminLog(
+        'contact_deleted',
+        contactId,
+        {
+          name: contactToDelete?.name,
+          email: contactToDelete?.email
+        }
+      );
+      
+    } catch (error) {
+      console.error('Error deleting contact:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete contact',
+        variant: 'destructive',
+      });
+    } finally {
+      setProcessingId(null);
+      setCurrentAction(null);
     }
   };
 
@@ -99,7 +145,7 @@ const ContactsSection = () => {
       <div>
         <h1 className="text-2xl font-bold text-white mb-2">Form Submissions</h1>
         <p className="text-gold/80">
-          Manage contact form submissions from the website
+          Review and manage contact form submissions
         </p>
       </div>
 
@@ -108,9 +154,9 @@ const ContactsSection = () => {
           <div className="flex justify-center items-center py-8">
             <Loader2 className="h-8 w-8 animate-spin text-gold" />
           </div>
-        ) : submissions.length === 0 ? (
+        ) : contacts.length === 0 ? (
           <div className="text-center py-8 text-white/60">
-            No form submissions found.
+            No contact submissions found.
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -118,58 +164,43 @@ const ContactsSection = () => {
               <TableHeader className="bg-navy-400">
                 <TableRow>
                   <TableHead className="text-gold">Name</TableHead>
-                  <TableHead className="text-gold">Contact Info</TableHead>
+                  <TableHead className="text-gold">Email</TableHead>
+                  <TableHead className="text-gold">Phone</TableHead>
                   <TableHead className="text-gold">Message</TableHead>
                   <TableHead className="text-gold">Submitted</TableHead>
-                  <TableHead className="text-gold">Status</TableHead>
-                  <TableHead className="text-gold">Action</TableHead>
+                  <TableHead className="text-gold text-center">Contacted</TableHead>
+                  <TableHead className="text-gold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {submissions.map((submission) => (
-                  <TableRow key={submission.id} className="border-b border-white/10 hover:bg-navy-400/50">
-                    <TableCell className="font-medium text-white">
-                      {submission.name}
-                    </TableCell>
-                    <TableCell className="text-white/80">
-                      <div>{submission.email}</div>
-                      <div>{submission.phone}</div>
-                    </TableCell>
-                    <TableCell className="text-white/80 max-w-xs truncate">
-                      {submission.message}
-                    </TableCell>
-                    <TableCell className="text-white/80">
-                      {formatDistanceToNow(new Date(submission.created_at), { addSuffix: true })}
-                    </TableCell>
-                    <TableCell>
-                      {submission.contacted ? (
-                        <span className="inline-flex items-center rounded-full bg-green-800/20 px-2 py-1 text-xs font-medium text-green-400">
-                          <Check className="mr-1 h-3 w-3" />
-                          Contacted
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center rounded-full bg-amber-800/20 px-2 py-1 text-xs font-medium text-amber-400">
-                          Pending
-                        </span>
-                      )}
+                {contacts.map((contact) => (
+                  <TableRow key={contact.id} className="border-b border-white/10 hover:bg-navy-400/50">
+                    <TableCell className="font-medium text-white">{contact.name}</TableCell>
+                    <TableCell className="text-white/80">{contact.email}</TableCell>
+                    <TableCell className="text-white/80">{contact.phone}</TableCell>
+                    <TableCell className="text-white/80 max-w-md truncate">{contact.message}</TableCell>
+                    <TableCell className="text-white/80">{format(new Date(contact.created_at), 'MMM d, yyyy h:mm a')}</TableCell>
+                    <TableCell className="text-center">
+                      <Checkbox
+                        checked={!!contact.contacted}
+                        onCheckedChange={() => handleContactedToggle(contact)}
+                        disabled={processingId === contact.id && currentAction === 'contact'}
+                      />
                     </TableCell>
                     <TableCell>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        disabled={submission.contacted || processingId === submission.id}
-                        onClick={() => markAsContacted(submission.id)}
-                        className="h-8 border-gold/30 text-gold hover:bg-gold/10"
-                      >
-                        {processingId === submission.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <>
-                            <Check className="mr-1 h-4 w-4" />
-                            Mark Contacted
-                          </>
-                        )}
-                      </Button>
+                      <div className="flex space-x-2">
+                        <button
+                          className="p-2 rounded-md hover:bg-red-900/20 text-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                          onClick={() => handleDeleteContact(contact.id)}
+                          disabled={processingId === contact.id && currentAction === 'delete'}
+                        >
+                          {processingId === contact.id && currentAction === 'delete' ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
