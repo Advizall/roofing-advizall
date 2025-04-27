@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -17,14 +16,28 @@ const RegisterForm = ({ redirectTo = '/login' }: RegisterFormProps) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [phone, setPhone] = useState('');
+  const phoneInputRef = useRef<HTMLInputElement>(null);
   
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const formatPhone = (value: string) => {
+    // Remove tudo que não for número
+    const digits = value.replace(/\D/g, '').slice(0, 10);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhone(e.target.value);
+    setPhone(formatted);
+  };
 
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
@@ -40,8 +53,11 @@ const RegisterForm = ({ redirectTo = '/login' }: RegisterFormProps) => {
     
     if (!fullName) newErrors.fullName = 'Full name is required';
     
-    if (!username) newErrors.username = 'Username is required';
-    else if (username.length < 3) newErrors.username = 'Username must be at least 3 characters';
+    if (!phone) {
+      newErrors.phone = 'Phone is required';
+    } else if (!/^\(\d{3}\) \d{3}-\d{4}$/.test(phone)) {
+      newErrors.phone = 'Phone must be in the format (555) 555-5555';
+    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -63,24 +79,25 @@ const RegisterForm = ({ redirectTo = '/login' }: RegisterFormProps) => {
         options: {
           data: {
             full_name: fullName,
-            username, // Ensure username is included in the user metadata
+            phone: phone,
           },
         },
       });
       
       if (error) throw error;
       
-      // If successful, also update the profiles table with the username
-      // This is just an extra step to ensure username is set correctly
+      // Cria o registro em profiles
       if (data.user) {
         const { error: profileError } = await supabase
           .from('profiles')
-          .update({ username })
-          .eq('id', data.user.id);
-          
-        if (profileError) {
-          console.error('Error updating profile:', profileError);
-        }
+          .insert({
+            id: data.user.id,
+            full_name: fullName,
+            email: email,
+            role: 'user',
+            phone: phone,
+          });
+        if (profileError) throw profileError;
       }
       
       toast({
@@ -99,8 +116,6 @@ const RegisterForm = ({ redirectTo = '/login' }: RegisterFormProps) => {
         setErrors({ ...errors, email: error.message });
       } else if (error.message.includes('password')) {
         setErrors({ ...errors, password: error.message });
-      } else if (error.message.includes('username')) {
-        setErrors({ ...errors, username: error.message });
       } else {
         toast({
           title: "Registration failed",
@@ -133,18 +148,17 @@ const RegisterForm = ({ redirectTo = '/login' }: RegisterFormProps) => {
         icon={<User size={18} />}
         required
       />
-      
       <FormField
-        id="username"
-        label="Username"
-        placeholder="johndoe"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        error={errors.username}
+        id="phone"
+        label="Phone"
+        placeholder="(555) 555-5555"
+        value={phone}
+        onChange={handlePhoneChange}
+        error={errors.phone}
         icon={<User size={18} />}
         required
+        inputRef={phoneInputRef}
       />
-      
       <FormField
         id="email"
         label="Email"
@@ -156,7 +170,6 @@ const RegisterForm = ({ redirectTo = '/login' }: RegisterFormProps) => {
         icon={<Mail size={18} />}
         required
       />
-      
       <PasswordField
         id="password"
         label="Password"
@@ -168,7 +181,6 @@ const RegisterForm = ({ redirectTo = '/login' }: RegisterFormProps) => {
         toggleVisibility={togglePasswordVisibility}
         required
       />
-      
       <PasswordField
         id="confirmPassword"
         label="Confirm Password"
@@ -180,7 +192,6 @@ const RegisterForm = ({ redirectTo = '/login' }: RegisterFormProps) => {
         toggleVisibility={toggleConfirmPasswordVisibility}
         required
       />
-      
       <Button 
         type="submit" 
         className="w-full bg-gold hover:bg-gold-400 text-navy-500 font-medium mt-6"
@@ -212,6 +223,7 @@ type FormFieldProps = {
   error?: string;
   icon?: React.ReactNode;
   required?: boolean;
+  inputRef?: React.RefObject<HTMLInputElement>;
 };
 
 const FormField = ({ 
@@ -223,7 +235,8 @@ const FormField = ({
   onChange, 
   error, 
   icon,
-  required 
+  required,
+  inputRef
 }: FormFieldProps) => {
   return (
     <div className="space-y-2">
@@ -237,6 +250,7 @@ const FormField = ({
           onChange={onChange}
           className={`bg-navy-200 border-navy-100 text-white pl-10 ${error ? 'border-red-500' : ''}`}
           required={required}
+          ref={inputRef}
         />
         {icon && (
           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60">

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
@@ -184,31 +183,37 @@ const ContactsSection = () => {
                       key={contact.id} 
                       className="border-b border-white/10 hover:bg-navy-400/50"
                     >
-                      <TableCell className="font-medium text-white">
-                        {contact.name}
-                      </TableCell>
-                      <TableCell>
-                        <div className="space-y-1">
-                          <div className="text-white/80">
-                            <span className="text-gold/60 mr-2">Email:</span>
-                            {contact.email}
-                          </div>
-                          <div className="text-white/80">
-                            <span className="text-gold/60 mr-2">Phone:</span>
-                            {contact.phone}
-                          </div>
+                      <TableCell className="text-white/80">
+                        <div className="flex flex-col gap-1">
+                          <span className="font-medium">{contact.name}</span>
+                          <span className="text-sm text-white/60">{contact.email}</span>
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-white/80">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-sm whitespace-nowrap">{contact.phone}</span>
+                          <span className="text-xs text-white/60 whitespace-nowrap">
+                            {contact.checkbox ? 'SMS Enabled' : 'SMS Disabled'}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-white/80">
                         <TooltipProvider>
                           <Tooltip>
-                            <TooltipTrigger>
-                              <div className="max-w-[300px] text-white/80 line-clamp-2">
-                                {contact.message}
+                            <TooltipTrigger className="text-left w-full">
+                              <div className="max-w-[250px] text-sm text-white/80">
+                                <p className="truncate cursor-pointer hover:text-white">
+                                  {contact.message}
+                                </p>
                               </div>
                             </TooltipTrigger>
-                            <TooltipContent side="top" className="max-w-[400px] bg-navy-200 border border-gold/20">
-                              <p className="text-white/90 p-2">{contact.message}</p>
+                            <TooltipContent 
+                              side="right" 
+                              className="max-w-[400px] bg-navy-200 border border-gold/20"
+                            >
+                              <p className="text-white/90 p-2 whitespace-pre-wrap">
+                                {contact.message}
+                              </p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>

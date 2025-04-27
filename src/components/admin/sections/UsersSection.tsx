@@ -1,13 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { supabaseAdmin } from '@/integrations/supabase/adminClient';
 import { Database } from '@/integrations/supabase/types';
 import { Loader2, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { createAdminLog } from '@/utils/adminLogUtils';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
@@ -22,28 +21,20 @@ const UsersSection = () => {
   }, []);
 
   const fetchUsers = async () => {
-    setLoading(true);
     try {
-      console.log('Fetching all users profiles...');
-      
-      // This query will work with our new RLS policies through the is_admin() function
+      setLoading(true);
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (profilesError) {
-        console.error('Error fetching users:', profilesError);
-        throw profilesError;
-      }
-
-      console.log('Fetched profiles successfully:', profilesData?.length || 0);
+      if (profilesError) throw profilesError;
       setUsers(profilesData || []);
-    } catch (error) {
-      console.error('Error in fetchUsers function:', error);
+    } catch (error: any) {
+      console.error('Error fetching users:', error);
       toast({
         title: 'Error',
-        description: 'Failed to fetch user profiles. Please refresh the page.',
+        description: 'Failed to fetch users',
         variant: 'destructive',
       });
     } finally {
@@ -55,53 +46,24 @@ const UsersSection = () => {
     try {
       setDeletingUserId(userId);
       
-      const userToDelete = users.find(user => user.id === userId);
-      if (!userToDelete) {
-        toast({
-          title: 'Error',
-          description: 'User not found',
-          variant: 'destructive',
-        });
-        return;
-      }
-      
-      if (userToDelete.role === 'admin') {
-        toast({
-          title: 'Action Denied',
-          description: 'Admin users cannot be deleted',
-          variant: 'destructive',
-        });
-        return;
-      }
+      // Delete from auth first using admin client
+      const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
+      if (authError) throw authError;
 
-      console.log('Attempting to delete user:', userId);
-      const { error } = await supabase
+      // Delete from profiles
+      const { error: profileError } = await supabase
         .from('profiles')
         .delete()
         .eq('id', userId);
 
-      if (error) {
-        console.error('Error during user deletion:', error);
-        throw error;
-      }
+      if (profileError) throw profileError;
 
-      console.log('User deleted successfully');
       setUsers(users.filter(user => user.id !== userId));
-      
-      await createAdminLog(
-        'user_deleted',
-        userId,
-        { 
-          user_email: userToDelete?.email,
-          user_name: userToDelete?.full_name || userToDelete?.username 
-        }
-      );
-
       toast({
         title: 'Success',
-        description: 'User has been deleted successfully',
+        description: 'User deleted successfully',
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting user:', error);
       toast({
         title: 'Error',
@@ -120,12 +82,20 @@ const UsersSection = () => {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="flex items-center gap-4">
         <h1 className="text-2xl font-bold text-white mb-2">User Management</h1>
-        <p className="text-gold/80">
-          View and manage user accounts
-        </p>
+        <Button
+          variant="outline"
+          size="sm"
+          className="border-gold/30 text-gold hover:bg-gold/10 hover:text-white"
+          onClick={fetchUsers}
+          disabled={loading}
+        >
+          {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+          Refresh
+        </Button>
       </div>
+      <p className="text-gold/80">View and manage user accounts</p>
 
       <div className="bg-navy-300 rounded-lg border border-gold/20 p-4">
         {loading ? (
@@ -152,7 +122,7 @@ const UsersSection = () => {
                 {users.map((user) => (
                   <TableRow key={user.id} className="border-b border-white/10 hover:bg-navy-400/50">
                     <TableCell className="font-medium text-white">
-                      <div>{user.full_name || user.username || 'Unnamed User'}</div>
+                      <div>{user.full_name || 'Unnamed User'}</div>
                       <div className="text-xs text-white/60">{user.email || 'No email'}</div>
                     </TableCell>
                     <TableCell>
@@ -171,24 +141,22 @@ const UsersSection = () => {
                       {formatDate(user.updated_at)}
                     </TableCell>
                     <TableCell>
-                      {user.role !== 'admin' && (
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="h-8 border-red-600/30 text-red-500 hover:bg-red-900/20"
-                          disabled={deletingUserId === user.id}
-                          onClick={() => handleDeleteUser(user.id)}
-                        >
-                          {deletingUserId === user.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <>
-                              <Trash2 className="mr-1 h-4 w-4" />
-                              Delete
-                            </>
-                          )}
-                        </Button>
-                      )}
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-8 border-red-600/30 text-red-500 hover:bg-red-900/20"
+                        disabled={deletingUserId === user.id}
+                        onClick={() => handleDeleteUser(user.id)}
+                      >
+                        {deletingUserId === user.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <>
+                            <Trash2 className="mr-1 h-4 w-4" />
+                            Delete
+                          </>
+                        )}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

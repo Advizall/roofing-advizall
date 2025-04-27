@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, LogIn } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +19,26 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Only logo on /login
+  if (location.pathname === '/login') {
+    return (
+      <header className={`fixed top-0 left-0 right-0 z-50 bg-navy-400/90 backdrop-blur-md shadow-md`}>
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-center">
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" 
+                alt="PACC Solutions LLC" 
+                style={{ height: "76.8px" }} 
+                className="h-[100.8px]" 
+              />
+            </Link>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   const navLinks = [
     {

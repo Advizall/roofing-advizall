@@ -1,58 +1,36 @@
-
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { LogOut, Menu, UserCog } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { LogOut, UserCog, Menu } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const ClientNavbar = () => {
-  const [userName, setUserName] = useState('Client');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userName, setUserName] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!session?.user) {
-          console.log('No session found in navbar');
-          return;
-        }
-        
-        console.log('Fetching profile in navbar for user:', session.user.id);
-        
-        // Use a query that leverages our new RLS policies
-        const { data: profileData, error } = await supabase
+    const fetchUserProfile = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
           .from('profiles')
-          .select('full_name, username, role, email')
+          .select('full_name, role')
           .eq('id', session.user.id)
           .single();
-            
-        if (error) {
-          console.error('Error fetching profile in navbar:', error);
-          return;
+
+        if (profile) {
+          setUserName(profile.full_name || 'User');
+          setIsAdmin(profile.role === 'admin');
         }
-        
-        if (profileData) {
-          setUserName(profileData.full_name || profileData.username || profileData.email || 'Client');
-          
-          // Check and log the admin status
-          const userIsAdmin = profileData.role === 'admin';
-          console.log('User role in navbar:', profileData.role, 'Is admin:', userIsAdmin);
-          setIsAdmin(userIsAdmin);
-        } else {
-          console.log('No profile data found in navbar');
-        }
-      } catch (err) {
-        console.error('Error in getProfile:', err);
       }
     };
-    
-    getProfile();
+
+    fetchUserProfile();
   }, []);
 
   const handleLogout = async () => {
@@ -73,15 +51,28 @@ const ClientNavbar = () => {
     }
   };
 
+  // Only logo on /login
+  if (location.pathname === '/login') {
+    return (
+      <nav className="bg-navy-200 border-b border-gold/20 py-4 px-6 fixed top-0 left-0 right-0 z-50">
+        <div className="flex items-center">
+          <Link to="/">
+            <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions" className="h-16" />
+          </Link>
+        </div>
+      </nav>
+    );
+  }
+
   return (
-    <nav className="bg-navy-200 border-b border-gold/20 py-4 px-6">
+    <nav className="bg-navy-200 border-b border-gold/20 py-4 px-6 fixed top-0 left-0 right-0 z-50">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <Link to="/">
             <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions" className="h-16" />
           </Link>
           <span className="text-gold ml-4 font-semibold hidden md:inline-block">
-            Client Dashboard
+            Dashboard
           </span>
         </div>
         

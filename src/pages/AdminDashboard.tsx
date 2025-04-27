@@ -1,121 +1,57 @@
-
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import Footer from '@/components/Footer';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminContent from '@/components/admin/AdminContent';
 import ClientNavbar from '@/components/client/ClientNavbar';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { toast } = useToast();
-  
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        setLoading(true);
-        
-        // Check if user is signed in
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-        
-        if (sessionError) {
-          console.error('Session error:', sessionError);
-          throw new Error('Authentication failed. Please try logging in again.');
-        }
-        
-        if (!sessionData.session) {
-          console.log('No session found, redirecting to login');
-          navigate('/login');
-          return;
-        }
-        
-        console.log('Session found, checking admin status for user:', sessionData.session.user.id);
-        
-        // Use our improved query that avoids RLS recursion issues
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', sessionData.session.user.id)
-          .single();
 
-        console.log('Admin check result:', { data, error });
-        
-        if (error) {
-          console.error('Profile fetch error:', error);
-          throw new Error('Failed to verify admin privileges.');
-        }
-        
-        if (!data || data.role !== 'admin') {
-          console.log('User is not an admin:', data?.role);
-          toast({
-            title: 'Access Denied',
-            description: 'You do not have permission to access the admin panel.',
-            variant: 'destructive',
-          });
-          navigate('/client-dashboard');
-          return;
-        }
-        
-        console.log('Admin status confirmed');
-        setIsAuthorized(true);
-      } catch (error: any) {
-        console.error('Authorization check failed:', error);
-        toast({
-          title: 'Authentication Error',
-          description: error.message || 'There was a problem verifying your credentials.',
-          variant: 'destructive',
-        });
+  useEffect(() => {
+    const checkAdminAccess = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
         navigate('/login');
-      } finally {
-        setLoading(false);
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single();
+
+      if (!profile || profile.role !== 'admin') {
+        navigate('/client-dashboard');
       }
     };
-    
-    checkAuth();
-  }, [navigate, toast]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-navy flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-10 w-10 text-gold animate-spin" />
-          <div className="text-gold text-lg">Checking permissions...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthorized) {
-    return null; // Will redirect in the useEffect
-  }
+    checkAdminAccess();
+  }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <div className="h-screen bg-navy flex flex-col">
       <ClientNavbar />
       
       <SidebarProvider defaultOpen={true}>
-        <div className="flex-grow flex w-full mt-[88px]">
-          <AdminSidebar 
-            activeSection={activeSection} 
-            setActiveSection={setActiveSection} 
-          />
+        <div className="flex flex-1 w-full h-[calc(100vh-88px)] mt-[88px]">
+          <div className="fixed left-0 h-[calc(100vh-88px)] mt-[88px] z-40">
+            <AdminSidebar 
+              activeSection={activeSection} 
+              setActiveSection={setActiveSection} 
+            />
+          </div>
           
-          <main className="flex-1 ml-0 md:ml-[16rem]">
+          <main className="flex-1 ml-0 md:ml-[16rem] overflow-y-auto p-6">
             <AdminContent 
               activeSection={activeSection} 
             />
           </main>
         </div>
       </SidebarProvider>
-      
-      <Footer />
     </div>
   );
 };
