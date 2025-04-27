@@ -125,9 +125,9 @@ const UsersSection = () => {
         description: 'User has been promoted to admin',
       });
 
-      await supabase.from('admin_logs').insert({
+      const adminLogData: AdminLogInsert = {
         action: 'role_changed',
-        performed_by: (await supabase.auth.getSession()).data.session?.user.id,
+        performed_by: (await supabase.auth.getSession()).data.session?.user.id || '',
         target_id: userId,
         details: JSON.stringify({ 
           from_role: 'user', 
@@ -135,7 +135,9 @@ const UsersSection = () => {
           user_email: userToPromote?.email,
           user_name: userToPromote?.full_name || userToPromote?.username 
         })
-      });
+      };
+
+      await supabase.from('admin_logs').insert(adminLogData);
 
     } catch (error) {
       console.error('Error promoting user:', error);
