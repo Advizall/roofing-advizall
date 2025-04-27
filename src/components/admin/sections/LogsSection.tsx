@@ -1,16 +1,21 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Loader2, Clock } from 'lucide-react';
-import { formatDistanceToNow, format } from 'date-fns';
+import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
 type AdminLog = Database['public']['Tables']['admin_logs']['Row'];
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
+interface ExtendedAdminLog extends AdminLog {
+  performer_name: string;
+}
+
 const LogsSection = () => {
-  const [logs, setLogs] = useState<AdminLog[]>([]);
+  const [logs, setLogs] = useState<ExtendedAdminLog[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
