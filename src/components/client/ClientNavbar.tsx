@@ -25,13 +25,12 @@ const ClientNavbar = () => {
         
         console.log('Fetching profile in navbar for user:', session.user.id);
         
-        // Use a query that avoids RLS recursion
+        // Use a query that leverages our new RLS policies
         const { data: profileData, error } = await supabase
           .from('profiles')
           .select('full_name, username, role, email')
           .eq('id', session.user.id)
-          .limit(1)
-          .maybeSingle();
+          .single();
             
         if (error) {
           console.error('Error fetching profile in navbar:', error);

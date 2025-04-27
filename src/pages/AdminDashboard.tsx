@@ -38,13 +38,12 @@ const AdminDashboard = () => {
         
         console.log('Session found, checking admin status for user:', sessionData.session.user.id);
         
-        // Use a direct query approach to avoid recursive RLS issues
+        // Use our improved query that avoids RLS recursion issues
         const { data, error } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', sessionData.session.user.id)
-          .limit(1)
-          .maybeSingle();
+          .single();
 
         console.log('Admin check result:', { data, error });
         

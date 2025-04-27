@@ -26,7 +26,7 @@ const UsersSection = () => {
     try {
       console.log('Fetching all users profiles...');
       
-      // Use direct query to avoid RLS recursion
+      // This query will work with our new RLS policies through the is_admin() function
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
