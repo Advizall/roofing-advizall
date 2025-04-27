@@ -200,24 +200,6 @@ export type Database = {
         }
         Relationships: []
       }
-      NetworkCrypto: {
-        Row: {
-          id: number
-          Numero: string
-          Thread: string | null
-        }
-        Insert: {
-          id?: number
-          Numero: string
-          Thread?: string | null
-        }
-        Update: {
-          id?: number
-          Numero?: string
-          Thread?: string | null
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null

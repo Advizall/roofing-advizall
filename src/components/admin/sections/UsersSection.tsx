@@ -22,7 +22,6 @@ const UsersSection = () => {
   }, []);
 
   const fetchUsers = async () => {
-    setLoading(true);
     try {
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
@@ -34,7 +33,6 @@ const UsersSection = () => {
         throw profilesError;
       }
 
-      console.log('Fetched profiles:', profilesData?.length || 0);
       setUsers(profilesData || []);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -79,12 +77,7 @@ const UsersSection = () => {
       if (error) throw error;
 
       setUsers(users.filter(user => user.id !== userId));
-
-      toast({
-        title: 'Success',
-        description: 'User has been deleted successfully',
-      });
-
+      
       await createAdminLog(
         'user_deleted',
         userId,
@@ -93,6 +86,11 @@ const UsersSection = () => {
           user_name: userToDelete?.full_name || userToDelete?.username 
         }
       );
+
+      toast({
+        title: 'Success',
+        description: 'User has been deleted successfully',
+      });
     } catch (error) {
       console.error('Error deleting user:', error);
       toast({

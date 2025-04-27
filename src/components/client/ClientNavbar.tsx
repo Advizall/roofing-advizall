@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogOut, Menu, UserCog } from 'lucide-react';
@@ -18,15 +17,19 @@ const ClientNavbar = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session?.user) {
-        const { data: profileData } = await supabase
+        const { data: profileData, error } = await supabase
           .from('profiles')
           .select('full_name, username, role')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle();
           
         if (profileData) {
           setUserName(profileData.full_name || profileData.username || 'Client');
           setIsAdmin(profileData.role === 'admin');
+        }
+
+        if (error) {
+          console.error('Error fetching profile:', error);
         }
       }
     };
