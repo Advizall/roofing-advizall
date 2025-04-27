@@ -61,6 +61,9 @@ const ContactsSection = () => {
   const markAsContacted = async (id: string) => {
     setProcessingId(id);
     try {
+      // Get the submission for logging
+      const submission = submissions.find(sub => sub.id === id);
+
       const { error } = await supabase
         .from('contact_submissions')
         .update({ contacted: true })
@@ -76,6 +79,19 @@ const ContactsSection = () => {
         title: 'Success',
         description: 'Submission marked as contacted',
       });
+
+      // Log the action
+      await supabase.from('admin_logs').insert({
+        action: 'contact_marked_contacted',
+        performed_by: (await supabase.auth.getSession()).data.session?.user.id,
+        target_id: id,
+        details: JSON.stringify({ 
+          name: submission?.name,
+          email: submission?.email,
+          phone: submission?.phone
+        })
+      });
+
     } catch (error) {
       console.error('Error updating submission:', error);
       toast({
@@ -138,7 +154,7 @@ const ContactsSection = () => {
                     <TableCell>
                       {submission.contacted ? (
                         <span className="inline-flex items-center rounded-full bg-green-800/20 px-2 py-1 text-xs font-medium text-green-400">
-                          <Check className="mr-1 h-3 w-3" /> {/* Changed from CheckIcon to Check */}
+                          <Check className="mr-1 h-3 w-3" />
                           Contacted
                         </span>
                       ) : (

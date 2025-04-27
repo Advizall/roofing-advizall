@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Trash2, UserPlus } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 // Update the interface to include email from the database column
 interface UserProfile {
@@ -15,12 +16,14 @@ interface UserProfile {
   created_at: string | null;
   updated_at: string | null;
   avatar_url: string | null;
-  email: string | null; // Added email column
+  email: string | null;
 }
 
 const UsersSection = () => {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [processingId, setProcessingId] = useState<string | null>(null);
+  const [currentAction, setCurrentAction] = useState<'delete' | 'promote' | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -41,7 +44,7 @@ const UsersSection = () => {
       // Ensure users always have an email, even if it's null
       const profilesWithEmail: UserProfile[] = profilesData?.map(profile => ({
         ...profile,
-        email: profile.email || null // Keep the email as it is from the database
+        email: profile.email || null
       })) || [];
 
       setUsers(profilesWithEmail);
@@ -54,6 +57,116 @@ const UsersSection = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Function to delete a user (only non-admin users)
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      setProcessingId(userId);
+      setCurrentAction('delete');
+
+      // First check if user is not an admin
+      const userToDelete = users.find(user => user.id === userId);
+      if (userToDelete?.role === 'admin') {
+        toast({
+          title: 'Action Denied',
+          description: 'Admin users cannot be deleted',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Delete the user from auth via profiles (cascading delete)
+      const { error } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      // Update local state
+      setUsers(users.filter(user => user.id !== userId));
+
+      toast({
+        title: 'Success',
+        description: 'User has been deleted successfully',
+      });
+
+      // Log the deletion action
+      await supabase.from('admin_logs').insert({
+        action: 'user_deleted',
+        performed_by: (await supabase.auth.getSession()).data.session?.user.id,
+        target_id: userId,
+        details: JSON.stringify({ 
+          user_email: userToDelete?.email,
+          user_name: userToDelete?.full_name || userToDelete?.username 
+        })
+      });
+
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete user',
+        variant: 'destructive',
+      });
+    } finally {
+      setProcessingId(null);
+      setCurrentAction(null);
+    }
+  };
+
+  // Function to promote a user to admin role
+  const handlePromoteUser = async (userId: string) => {
+    try {
+      setProcessingId(userId);
+      setCurrentAction('promote');
+
+      // Get current user data for logging
+      const userToPromote = users.find(user => user.id === userId);
+
+      // Update the user's role to admin
+      const { error } = await supabase
+        .from('profiles')
+        .update({ role: 'admin' })
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      // Update local state
+      setUsers(users.map(user => 
+        user.id === userId ? { ...user, role: 'admin' } : user
+      ));
+
+      toast({
+        title: 'Success',
+        description: 'User has been promoted to admin',
+      });
+
+      // Log the promotion action
+      await supabase.from('admin_logs').insert({
+        action: 'role_changed',
+        performed_by: (await supabase.auth.getSession()).data.session?.user.id,
+        target_id: userId,
+        details: JSON.stringify({ 
+          from_role: 'user', 
+          to_role: 'admin',
+          user_email: userToPromote?.email,
+          user_name: userToPromote?.full_name || userToPromote?.username 
+        })
+      });
+
+    } catch (error) {
+      console.error('Error promoting user:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to promote user',
+        variant: 'destructive',
+      });
+    } finally {
+      setProcessingId(null);
+      setCurrentAction(null);
     }
   };
 
@@ -84,6 +197,7 @@ const UsersSection = () => {
                   <TableHead className="text-gold">Role</TableHead>
                   <TableHead className="text-gold">Created</TableHead>
                   <TableHead className="text-gold">Last Updated</TableHead>
+                  <TableHead className="text-gold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -111,6 +225,46 @@ const UsersSection = () => {
                       {user.updated_at
                         ? formatDistanceToNow(new Date(user.updated_at), { addSuffix: true })
                         : 'N/A'}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex space-x-2">
+                        {user.role !== 'admin' && (
+                          <>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-8 border-gold/30 text-gold hover:bg-gold/10"
+                              disabled={(processingId === user.id) || user.role === 'admin'}
+                              onClick={() => handlePromoteUser(user.id)}
+                            >
+                              {processingId === user.id && currentAction === 'promote' ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <>
+                                  <UserPlus className="mr-1 h-4 w-4" />
+                                  Make Admin
+                                </>
+                              )}
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-8 border-red-600/30 text-red-500 hover:bg-red-900/20"
+                              disabled={(processingId === user.id)}
+                              onClick={() => handleDeleteUser(user.id)}
+                            >
+                              {processingId === user.id && currentAction === 'delete' ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <>
+                                  <Trash2 className="mr-1 h-4 w-4" />
+                                  Delete
+                                </>
+                              )}
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

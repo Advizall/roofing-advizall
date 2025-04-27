@@ -4,7 +4,8 @@ import {
   Users, 
   MessageSquare, 
   Mail, 
-  Home 
+  Home,
+  Clock
 } from 'lucide-react';
 import {
   Sidebar,
@@ -30,6 +31,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
     { id: 'contacts', label: 'Form Submissions', icon: Mail },
     { id: 'conversations', label: 'Chat Conversations', icon: MessageSquare },
     { id: 'users', label: 'Users Management', icon: Users },
+    { id: 'logs', label: 'Admin Logs', icon: Clock },
   ];
 
   return (

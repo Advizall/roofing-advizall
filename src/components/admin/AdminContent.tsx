@@ -1,9 +1,10 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import DashboardSection from './sections/DashboardSection';
 import ContactsSection from './sections/ContactsSection';
 import ConversationsSection from './sections/ConversationsSection';
 import UsersSection from './sections/UsersSection';
+import LogsSection from './sections/LogsSection';
 
 interface AdminContentProps {
   activeSection: string;
@@ -20,6 +21,8 @@ const AdminContent: React.FC<AdminContentProps> = ({ activeSection }) => {
         return <ConversationsSection />;
       case 'users':
         return <UsersSection />;
+      case 'logs':
+        return <LogsSection />;
       default:
         return <DashboardSection />;
     }
