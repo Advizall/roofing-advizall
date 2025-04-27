@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogOut, Menu, UserCog } from 'lucide-react';
@@ -14,23 +15,30 @@ const ClientNavbar = () => {
 
   useEffect(() => {
     const getProfile = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session?.user) {
-        const { data: profileData, error } = await supabase
-          .from('profiles')
-          .select('full_name, username, role')
-          .eq('id', session.user.id)
-          .maybeSingle();
-          
-        if (profileData) {
-          setUserName(profileData.full_name || profileData.username || 'Client');
-          setIsAdmin(profileData.role === 'admin');
-        }
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+          const { data: profileData, error } = await supabase
+            .from('profiles')
+            .select('full_name, username, role')
+            .eq('id', session.user.id)
+            .maybeSingle();
+            
+          if (profileData) {
+            setUserName(profileData.full_name || profileData.username || 'Client');
+            setIsAdmin(profileData.role === 'admin');
+            console.log('User role:', profileData.role);
+          } else {
+            console.log('No profile data found');
+          }
 
-        if (error) {
-          console.error('Error fetching profile:', error);
+          if (error) {
+            console.error('Error fetching profile:', error);
+          }
         }
+      } catch (err) {
+        console.error('Error in getProfile:', err);
       }
     };
     

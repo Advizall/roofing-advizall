@@ -22,7 +22,9 @@ const UsersSection = () => {
   }, []);
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
+      console.log('Fetching users profiles...');
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
@@ -33,6 +35,7 @@ const UsersSection = () => {
         throw profilesError;
       }
 
+      console.log('Fetched profiles:', profilesData?.length || 0);
       setUsers(profilesData || []);
     } catch (error) {
       console.error('Error fetching users:', error);

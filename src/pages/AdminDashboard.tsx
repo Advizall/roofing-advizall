@@ -8,6 +8,7 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminContent from '@/components/admin/AdminContent';
 import ClientNavbar from '@/components/client/ClientNavbar';
 import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -22,20 +23,32 @@ const AdminDashboard = () => {
         setLoading(true);
         
         // Check if user is signed in
-        const { data: sessionData } = await supabase.auth.getSession();
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          throw new Error(sessionError.message);
+        }
+        
         if (!sessionData.session) {
           navigate('/login');
           return;
         }
         
         // Check if user is an admin
-        const { data: profileData, error } = await supabase
+        const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', sessionData.session.user.id)
-          .single();
+          .maybeSingle();
         
-        if (error || profileData?.role !== 'admin') {
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+          throw new Error(profileError.message);
+        }
+        
+        console.log('Admin check - User role:', profileData?.role);
+        
+        if (!profileData || profileData.role !== 'admin') {
           toast({
             title: 'Access Denied',
             description: 'You do not have permission to access the admin panel.',
@@ -48,6 +61,11 @@ const AdminDashboard = () => {
         setIsAuthorized(true);
       } catch (error) {
         console.error('Error checking authorization:', error);
+        toast({
+          title: 'Authentication Error',
+          description: 'There was a problem verifying your credentials.',
+          variant: 'destructive',
+        });
         navigate('/login');
       } finally {
         setLoading(false);
@@ -60,7 +78,10 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-navy flex items-center justify-center">
-        <div className="text-gold text-lg">Loading...</div>
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-10 w-10 text-gold animate-spin" />
+          <div className="text-gold text-lg">Checking permissions...</div>
+        </div>
       </div>
     );
   }
