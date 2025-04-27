@@ -18,24 +18,35 @@ const ClientNavbar = () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
-        if (session?.user) {
-          const { data: profileData, error } = await supabase
-            .from('profiles')
-            .select('full_name, username, role')
-            .eq('id', session.user.id)
-            .maybeSingle();
+        if (!session?.user) {
+          console.log('No session found in navbar');
+          return;
+        }
+        
+        console.log('Fetching profile in navbar for user:', session.user.id);
+        
+        // Use a query that avoids RLS recursion
+        const { data: profileData, error } = await supabase
+          .from('profiles')
+          .select('full_name, username, role, email')
+          .eq('id', session.user.id)
+          .limit(1)
+          .maybeSingle();
             
-          if (profileData) {
-            setUserName(profileData.full_name || profileData.username || 'Client');
-            setIsAdmin(profileData.role === 'admin');
-            console.log('User role:', profileData.role);
-          } else {
-            console.log('No profile data found');
-          }
-
-          if (error) {
-            console.error('Error fetching profile:', error);
-          }
+        if (error) {
+          console.error('Error fetching profile in navbar:', error);
+          return;
+        }
+        
+        if (profileData) {
+          setUserName(profileData.full_name || profileData.username || profileData.email || 'Client');
+          
+          // Check and log the admin status
+          const userIsAdmin = profileData.role === 'admin';
+          console.log('User role in navbar:', profileData.role, 'Is admin:', userIsAdmin);
+          setIsAdmin(userIsAdmin);
+        } else {
+          console.log('No profile data found in navbar');
         }
       } catch (err) {
         console.error('Error in getProfile:', err);

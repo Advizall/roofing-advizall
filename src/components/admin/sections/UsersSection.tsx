@@ -24,7 +24,9 @@ const UsersSection = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      console.log('Fetching users profiles...');
+      console.log('Fetching all users profiles...');
+      
+      // Use direct query to avoid RLS recursion
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
@@ -35,13 +37,13 @@ const UsersSection = () => {
         throw profilesError;
       }
 
-      console.log('Fetched profiles:', profilesData?.length || 0);
+      console.log('Fetched profiles successfully:', profilesData?.length || 0);
       setUsers(profilesData || []);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error in fetchUsers function:', error);
       toast({
         title: 'Error',
-        description: 'Failed to fetch user profiles',
+        description: 'Failed to fetch user profiles. Please refresh the page.',
         variant: 'destructive',
       });
     } finally {
@@ -72,13 +74,18 @@ const UsersSection = () => {
         return;
       }
 
+      console.log('Attempting to delete user:', userId);
       const { error } = await supabase
         .from('profiles')
         .delete()
         .eq('id', userId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error during user deletion:', error);
+        throw error;
+      }
 
+      console.log('User deleted successfully');
       setUsers(users.filter(user => user.id !== userId));
       
       await createAdminLog(

@@ -26,29 +26,35 @@ const AdminDashboard = () => {
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
-          throw new Error(sessionError.message);
+          console.error('Session error:', sessionError);
+          throw new Error('Authentication failed. Please try logging in again.');
         }
         
         if (!sessionData.session) {
+          console.log('No session found, redirecting to login');
           navigate('/login');
           return;
         }
         
-        // Check if user is an admin
-        const { data: profileData, error: profileError } = await supabase
+        console.log('Session found, checking admin status for user:', sessionData.session.user.id);
+        
+        // Use a direct query approach to avoid recursive RLS issues
+        const { data, error } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', sessionData.session.user.id)
+          .limit(1)
           .maybeSingle();
+
+        console.log('Admin check result:', { data, error });
         
-        if (profileError) {
-          console.error('Error fetching profile:', profileError);
-          throw new Error(profileError.message);
+        if (error) {
+          console.error('Profile fetch error:', error);
+          throw new Error('Failed to verify admin privileges.');
         }
         
-        console.log('Admin check - User role:', profileData?.role);
-        
-        if (!profileData || profileData.role !== 'admin') {
+        if (!data || data.role !== 'admin') {
+          console.log('User is not an admin:', data?.role);
           toast({
             title: 'Access Denied',
             description: 'You do not have permission to access the admin panel.',
@@ -58,12 +64,13 @@ const AdminDashboard = () => {
           return;
         }
         
+        console.log('Admin status confirmed');
         setIsAuthorized(true);
-      } catch (error) {
-        console.error('Error checking authorization:', error);
+      } catch (error: any) {
+        console.error('Authorization check failed:', error);
         toast({
           title: 'Authentication Error',
-          description: 'There was a problem verifying your credentials.',
+          description: error.message || 'There was a problem verifying your credentials.',
           variant: 'destructive',
         });
         navigate('/login');
