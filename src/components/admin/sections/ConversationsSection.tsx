@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Loader2, MessageSquare, CheckCircle, Trash2 } from 'lucide-react';
+import { Loader2, MessageSquare, CheckCircle, Trash2, ArrowRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { createAdminLog } from '@/utils/adminLogUtils';
 import { Button } from '@/components/ui/button';
+import ChatDialog from './conversations/ChatDialog';
 
 type ChatConversation = Database['public']['Tables']['chat_conversations']['Row'];
 
@@ -15,6 +16,7 @@ const ConversationsSection = () => {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [currentAction, setCurrentAction] = useState<'contact' | 'delete' | null>(null);
+  const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -49,7 +51,6 @@ const ConversationsSection = () => {
       setProcessingId(conversation.id);
       setCurrentAction('contact');
       
-      // Atualizar o status de contatado
       const newContactedStatus = !conversation.contacted;
       
       const { error } = await supabase
@@ -59,7 +60,6 @@ const ConversationsSection = () => {
       
       if (error) throw error;
       
-      // Atualizar o estado local
       setConversations(conversations.map(c => 
         c.id === conversation.id ? { ...c, contacted: newContactedStatus } : c
       ));
@@ -71,7 +71,6 @@ const ConversationsSection = () => {
           : 'Conversation marked as not contacted',
       });
 
-      // Registrar a ação nos logs de administração
       await createAdminLog(
         'chat_marked_contacted',
         conversation.id,
@@ -100,7 +99,6 @@ const ConversationsSection = () => {
       setProcessingId(conversation.id);
       setCurrentAction('delete');
       
-      // Primeiro exclua as mensagens relacionadas
       const { error: messagesError } = await supabase
         .from('chat_messages')
         .delete()
@@ -108,7 +106,6 @@ const ConversationsSection = () => {
       
       if (messagesError) throw messagesError;
       
-      // Depois exclua a conversa
       const { error: conversationError } = await supabase
         .from('chat_conversations')
         .delete()
@@ -116,7 +113,6 @@ const ConversationsSection = () => {
       
       if (conversationError) throw conversationError;
       
-      // Atualizar o estado local
       setConversations(conversations.filter(c => c.id !== conversation.id));
       
       toast({
@@ -124,7 +120,6 @@ const ConversationsSection = () => {
         description: 'Conversation has been deleted',
       });
 
-      // Registrar a ação nos logs de administração
       await createAdminLog(
         'chat_deleted',
         conversation.id,
@@ -180,7 +175,11 @@ const ConversationsSection = () => {
               </TableHeader>
               <TableBody>
                 {conversations.map((conversation) => (
-                  <TableRow key={conversation.id} className="border-b border-white/10 hover:bg-navy-400/50">
+                  <TableRow 
+                    key={conversation.id} 
+                    className="border-b border-white/10 hover:bg-navy-400/50 cursor-pointer"
+                    onClick={() => setSelectedConversation(conversation)}
+                  >
                     <TableCell className="font-medium text-white">
                       <div>{conversation.user_name || 'Unknown User'}</div>
                       <div className="text-xs text-white/60">{conversation.user_email || 'No email'}</div>
@@ -199,7 +198,10 @@ const ConversationsSection = () => {
                             ? 'bg-green-900/30 text-green-400'
                             : 'bg-red-900/30 text-red-400'
                         }`}
-                        onClick={() => handleContactedToggle(conversation)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleContactedToggle(conversation);
+                        }}
                         disabled={processingId === conversation.id && currentAction === 'contact'}
                       >
                         {processingId === conversation.id && currentAction === 'contact' ? (
@@ -213,22 +215,39 @@ const ConversationsSection = () => {
                       </button>
                     </TableCell>
                     <TableCell>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="h-8 border-red-600/30 text-red-500 hover:bg-red-900/20"
-                        disabled={processingId === conversation.id && currentAction === 'delete'}
-                        onClick={() => handleDeleteConversation(conversation)}
-                      >
-                        {processingId === conversation.id && currentAction === 'delete' ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <>
-                            <Trash2 className="mr-1 h-4 w-4" />
-                            Delete
-                          </>
-                        )}
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-8 bg-gold/10 border-gold/30 text-gold hover:bg-gold/20"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedConversation(conversation);
+                          }}
+                        >
+                          <ArrowRight className="h-4 w-4 mr-1" />
+                          View Chat
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-8 border-red-600/30 text-red-500 hover:bg-red-900/20"
+                          disabled={processingId === conversation.id && currentAction === 'delete'}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteConversation(conversation);
+                          }}
+                        >
+                          {processingId === conversation.id && currentAction === 'delete' ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <>
+                              <Trash2 className="h-4 w-4 mr-1" />
+                              Delete
+                            </>
+                          )}
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -237,6 +256,12 @@ const ConversationsSection = () => {
           </div>
         )}
       </div>
+
+      <ChatDialog
+        open={!!selectedConversation}
+        onOpenChange={(open) => !open && setSelectedConversation(null)}
+        conversation={selectedConversation}
+      />
     </div>
   );
 };
