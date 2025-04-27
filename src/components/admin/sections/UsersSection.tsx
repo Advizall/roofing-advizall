@@ -5,9 +5,9 @@ import { Database } from '@/integrations/supabase/types';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import UsersTable from './users/UsersTable';
+import { createAdminLog } from '@/utils/adminLogUtils';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
-type AdminLogInsert = Database['public']['Tables']['admin_logs']['Insert'];
 
 const UsersSection = () => {
   const [users, setUsers] = useState<Profile[]>([]);
@@ -23,6 +23,7 @@ const UsersSection = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
+      // Fetch all profiles without any filtering by user ID
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
@@ -77,17 +78,14 @@ const UsersSection = () => {
         description: 'User has been deleted successfully',
       });
 
-      const adminLogData: AdminLogInsert = {
-        action: 'user_deleted',
-        performed_by: (await supabase.auth.getSession()).data.session?.user.id || '',
-        target_id: userId,
-        details: JSON.stringify({ 
+      await createAdminLog(
+        'user_deleted',
+        userId,
+        { 
           user_email: userToDelete?.email,
           user_name: userToDelete?.full_name || userToDelete?.username 
-        })
-      };
-
-      await supabase.from('admin_logs').insert(adminLogData);
+        }
+      );
 
     } catch (error) {
       console.error('Error deleting user:', error);
@@ -125,19 +123,16 @@ const UsersSection = () => {
         description: 'User has been promoted to admin',
       });
 
-      const adminLogData: AdminLogInsert = {
-        action: 'role_changed',
-        performed_by: (await supabase.auth.getSession()).data.session?.user.id || '',
-        target_id: userId,
-        details: JSON.stringify({ 
+      await createAdminLog(
+        'role_changed',
+        userId,
+        { 
           from_role: 'user', 
           to_role: 'admin',
           user_email: userToPromote?.email,
           user_name: userToPromote?.full_name || userToPromote?.username 
-        })
-      };
-
-      await supabase.from('admin_logs').insert(adminLogData);
+        }
+      );
 
     } catch (error) {
       console.error('Error promoting user:', error);
