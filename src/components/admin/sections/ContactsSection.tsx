@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Loader2, Trash2, Check } from 'lucide-react';
+import { Loader2, Trash2, Check, MessageSquare, CheckCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -36,7 +36,17 @@ const ContactsSection = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erro ao buscar contatos:', error);
+        throw error;
+      }
+
+      // Log para debug
+      console.log('Contatos buscados:', data?.map(c => ({
+        id: c.id,
+        name: c.name,
+        contacted: c.contacted
+      })));
 
       setContacts(data || []);
     } catch (error) {
@@ -59,17 +69,29 @@ const ContactsSection = () => {
       // Atualizar o status de contatado
       const newContactedStatus = !contact.contacted;
       
+      console.log('Atualizando contato:', {
+        id: contact.id,
+        oldStatus: contact.contacted,
+        newStatus: newContactedStatus
+      });
+
+      // Fazer o update
       const { error } = await supabase
         .from('contact_submissions')
         .update({ contacted: newContactedStatus })
         .eq('id', contact.id);
       
-      if (error) throw error;
-      
+      if (error) {
+        console.error('Erro no update:', error);
+        throw error;
+      }
+
       // Atualizar o estado local
-      setContacts(contacts.map(c => 
-        c.id === contact.id ? { ...c, contacted: newContactedStatus } : c
-      ));
+      setContacts(prevContacts => 
+        prevContacts.map(c => 
+          c.id === contact.id ? { ...c, contacted: newContactedStatus } : c
+        )
+      );
       
       toast({
         title: 'Success',
@@ -221,13 +243,25 @@ const ContactsSection = () => {
                       <TableCell className="text-white/80 whitespace-nowrap">
                         {format(new Date(contact.created_at), 'MMM d, yyyy h:mm a')}
                       </TableCell>
-                      <TableCell className="text-center">
-                        <Checkbox
-                          checked={!!contact.contacted}
-                          onCheckedChange={() => handleContactedToggle(contact)}
+                      <TableCell>
+                        <button
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                            contact.contacted
+                              ? 'bg-green-900/30 text-green-400'
+                              : 'bg-red-900/30 text-red-400'
+                          }`}
+                          onClick={() => handleContactedToggle(contact)}
                           disabled={processingId === contact.id && currentAction === 'contact'}
-                          className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
-                        />
+                        >
+                          {processingId === contact.id && currentAction === 'contact' ? (
+                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                          ) : contact.contacted ? (
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                          ) : (
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                          )}
+                          {contact.contacted ? 'Contacted' : 'Not Contacted'}
+                        </button>
                       </TableCell>
                       <TableCell>
                         <button

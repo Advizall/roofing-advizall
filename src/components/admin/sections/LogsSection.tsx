@@ -5,16 +5,6 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Json } from '../../../types/supabase';
-
-interface Log {
-  id: string;
-  created_at: string;
-  action: string;
-  details: Json;
-  target_id: string;
-  performed_by: string;
-}
 
 type AdminLog = Database['public']['Tables']['admin_logs']['Row'];
 
@@ -61,7 +51,7 @@ const formatActionType = (action: string): string => {
 };
 
 const LogsSection = () => {
-  const [logs, setLogs] = useState<Log[]>([]);
+  const [logs, setLogs] = useState<AdminLog[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -120,7 +110,7 @@ const LogsSection = () => {
                   <TableHead className="text-gold">Date</TableHead>
                   <TableHead className="text-gold">Action</TableHead>
                   <TableHead className="text-gold">Details</TableHead>
-                  <TableHead className="text-gold">Target ID</TableHead>
+                  <TableHead className="text-gold">Performed By</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -147,7 +137,7 @@ const LogsSection = () => {
                       )}
                     </TableCell>
                     <TableCell className="text-white/80">
-                      {log.target_id}
+                      {log.performed_by}
                     </TableCell>
                   </TableRow>
                 ))}
