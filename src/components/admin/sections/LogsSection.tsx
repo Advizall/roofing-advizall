@@ -1,20 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { Database } from '@/integrations/supabase/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Loader2, Clock } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
-interface AdminLog {
-  id: string;
-  created_at: string;
-  action: string;
-  performed_by: string;
-  target_id: string | null;
-  details: any;
-  performer_name?: string;
-}
+type AdminLog = Database['public']['Tables']['admin_logs']['Row'];
+type Profile = Database['public']['Tables']['profiles']['Row'];
 
 const LogsSection = () => {
   const [logs, setLogs] = useState<AdminLog[]>([]);
@@ -46,7 +39,7 @@ const LogsSection = () => {
         const performer = profiles?.find(p => p.id === log.performed_by);
         return {
           ...log,
-          performer_name: performer ? (performer.full_name || performer.username || performer.email) : 'Unknown User'
+          performer_name: performer ? (performer.full_name || performer.username || performer.email || 'Unknown User') : 'Unknown User'
         };
       }) || [];
 

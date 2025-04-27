@@ -1,26 +1,17 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { Database } from '@/integrations/supabase/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Loader2, Trash2, UserPlus } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 
-// Update the interface to include email from the database column
-interface UserProfile {
-  id: string;
-  full_name: string | null;
-  username: string | null;
-  role: string | null;
-  created_at: string | null;
-  updated_at: string | null;
-  avatar_url: string | null;
-  email: string | null;
-}
+type Profile = Database['public']['Tables']['profiles']['Row'];
+type AdminLogInsert = Database['public']['Tables']['admin_logs']['Insert'];
 
 const UsersSection = () => {
-  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [users, setUsers] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [currentAction, setCurrentAction] = useState<'delete' | 'promote' | null>(null);
@@ -42,7 +33,7 @@ const UsersSection = () => {
       if (profilesError) throw profilesError;
 
       // Ensure users always have an email, even if it's null
-      const profilesWithEmail: UserProfile[] = profilesData?.map(profile => ({
+      const profilesWithEmail: Profile[] = profilesData?.map(profile => ({
         ...profile,
         email: profile.email || null
       })) || [];
@@ -60,7 +51,6 @@ const UsersSection = () => {
     }
   };
 
-  // Function to delete a user (only non-admin users)
   const handleDeleteUser = async (userId: string) => {
     try {
       setProcessingId(userId);
@@ -94,15 +84,17 @@ const UsersSection = () => {
       });
 
       // Log the deletion action
-      await supabase.from('admin_logs').insert({
+      const adminLogData: AdminLogInsert = {
         action: 'user_deleted',
-        performed_by: (await supabase.auth.getSession()).data.session?.user.id,
+        performed_by: (await supabase.auth.getSession()).data.session?.user.id || '',
         target_id: userId,
         details: JSON.stringify({ 
           user_email: userToDelete?.email,
           user_name: userToDelete?.full_name || userToDelete?.username 
         })
-      });
+      };
+
+      await supabase.from('admin_logs').insert(adminLogData);
 
     } catch (error) {
       console.error('Error deleting user:', error);
@@ -117,7 +109,6 @@ const UsersSection = () => {
     }
   };
 
-  // Function to promote a user to admin role
   const handlePromoteUser = async (userId: string) => {
     try {
       setProcessingId(userId);

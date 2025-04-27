@@ -1,23 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { Database } from '@/integrations/supabase/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
-// Update the interface to include 'contacted'
-interface ContactSubmission {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  created_at: string;
-  contacted: boolean;
-  checkbox?: boolean; // Optional field
-}
+type ContactSubmission = Database['public']['Tables']['contact_submissions']['Row'];
+type AdminLogInsert = Database['public']['Tables']['admin_logs']['Insert'];
 
 const ContactsSection = () => {
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
@@ -39,10 +30,9 @@ const ContactsSection = () => {
 
       if (error) throw error;
       
-      // Ensure 'contacted' is always a boolean
       const submissionsWithDefaults: ContactSubmission[] = (data || []).map(item => ({
         ...item,
-        contacted: item.contacted ?? false // Default to false if contacted is null/undefined
+        contacted: item.contacted ?? false
       }));
       
       setSubmissions(submissionsWithDefaults);
@@ -61,7 +51,6 @@ const ContactsSection = () => {
   const markAsContacted = async (id: string) => {
     setProcessingId(id);
     try {
-      // Get the submission for logging
       const submission = submissions.find(sub => sub.id === id);
 
       const { error } = await supabase
@@ -80,17 +69,18 @@ const ContactsSection = () => {
         description: 'Submission marked as contacted',
       });
 
-      // Log the action
-      await supabase.from('admin_logs').insert({
+      const adminLogData: AdminLogInsert = {
         action: 'contact_marked_contacted',
-        performed_by: (await supabase.auth.getSession()).data.session?.user.id,
+        performed_by: (await supabase.auth.getSession()).data.session?.user.id || '',
         target_id: id,
         details: JSON.stringify({ 
           name: submission?.name,
           email: submission?.email,
           phone: submission?.phone
         })
-      });
+      };
+
+      await supabase.from('admin_logs').insert(adminLogData);
 
     } catch (error) {
       console.error('Error updating submission:', error);
