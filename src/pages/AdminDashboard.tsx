@@ -18,13 +18,10 @@ const AdminDashboard = () => {
         return;
       }
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', session.user.id)
-        .single();
-
-      if (!profile || profile.role !== 'admin') {
+      // Check admin role from user metadata
+      const isAdmin = session.user.app_metadata?.role === 'admin';
+      
+      if (!isAdmin) {
         navigate('/client-dashboard');
       }
     };

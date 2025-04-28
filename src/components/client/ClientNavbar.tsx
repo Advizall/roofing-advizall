@@ -17,16 +17,21 @@ const ClientNavbar = () => {
     const fetchUserProfile = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
+        // Get user metadata for admin check
+        const isUserAdmin = session.user.app_metadata?.role === 'admin';
+        
+        // Get profile for user name
         const { data: profile } = await supabase
           .from('profiles')
-          .select('full_name, role')
+          .select('full_name')
           .eq('id', session.user.id)
           .single();
 
         if (profile) {
           setUserName(profile.full_name || 'User');
-          setIsAdmin(profile.role === 'admin');
         }
+        
+        setIsAdmin(isUserAdmin);
       }
     };
 
