@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { supabaseAdmin } from '@/integrations/supabase/adminClient';
 import { Database } from '@/integrations/supabase/types';
 import { Loader2, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -46,11 +45,6 @@ const UsersSection = () => {
     try {
       setDeletingUserId(userId);
       
-      // Delete from auth first using admin client
-      const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
-      if (authError) throw authError;
-
-      // Delete from profiles
       const { error: profileError } = await supabase
         .from('profiles')
         .delete()
