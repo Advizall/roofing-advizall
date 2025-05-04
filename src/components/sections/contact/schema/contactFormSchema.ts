@@ -12,10 +12,17 @@ export const contactFormSchema = z.object({
   phone: z.string()
     .regex(/^\(\d{3}\)\s\d{3}-\d{4}$/, "Phone number must follow the format (555) 555-5555"),
   
+  address: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  zipCode: z.string().optional(),
+  
+  referralSource: z.string().optional(),
+  otherSource: z.string().optional(),
+  
   message: z.string()
     .min(10, "Message must be at least 10 characters long")
     .max(300, "Message cannot exceed 300 characters")
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
-

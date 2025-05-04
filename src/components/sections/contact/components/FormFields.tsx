@@ -9,9 +9,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue 
+} from "@/components/ui/select";
 import { SMSTermsDialog } from "../../SMSTermsDialog";
 import { UseFormReturn } from "react-hook-form";
 import { ContactFormData } from "../schema/contactFormSchema";
+import { useState } from "react";
 
 interface FormFieldsProps {
   form: UseFormReturn<ContactFormData>;
@@ -21,6 +29,16 @@ interface FormFieldsProps {
 }
 
 export const FormFields = ({ form, handlePhoneChange, smsConsent, setSmsConsent }: FormFieldsProps) => {
+  const [showOtherSource, setShowOtherSource] = useState(false);
+  
+  const handleReferralSourceChange = (value: string) => {
+    form.setValue("referralSource", value);
+    setShowOtherSource(value === "Other");
+    if (value !== "Other") {
+      form.setValue("otherSource", "");
+    }
+  };
+
   return (
     <>
       <FormField
@@ -77,6 +95,130 @@ export const FormFields = ({ form, handlePhoneChange, smsConsent, setSmsConsent 
           </FormItem>
         )}
       />
+      
+      <FormField
+        control={form.control}
+        name="address"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-white/90">Street Address (Optional)</FormLabel>
+            <FormControl>
+              <Input 
+                placeholder="123 Main St" 
+                className="bg-navy-200 border border-white/10 rounded-lg focus:outline-none focus:border-gold" 
+                {...field} 
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <FormField
+          control={form.control}
+          name="city"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white/90">City (Optional)</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="Chicago" 
+                  className="bg-navy-200 border border-white/10 rounded-lg focus:outline-none focus:border-gold" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="state"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white/90">State (Optional)</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="Illinois" 
+                  className="bg-navy-200 border border-white/10 rounded-lg focus:outline-none focus:border-gold" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="zipCode"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white/90">Zip Code (Optional)</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="60513" 
+                  className="bg-navy-200 border border-white/10 rounded-lg focus:outline-none focus:border-gold" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      
+      <FormField
+        control={form.control}
+        name="referralSource"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-white/90">How did you hear about us? (Optional)</FormLabel>
+            <Select onValueChange={handleReferralSourceChange} value={field.value}>
+              <FormControl>
+                <SelectTrigger className="bg-navy-200 border border-white/10 rounded-lg focus:outline-none focus:border-gold text-white">
+                  <SelectValue placeholder="Select an option" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent className="bg-navy-300 border border-white/10">
+                <SelectItem value="Google">Google</SelectItem>
+                <SelectItem value="Facebook">Facebook</SelectItem>
+                <SelectItem value="Instagram">Instagram</SelectItem>
+                <SelectItem value="TikTok">TikTok</SelectItem>
+                <SelectItem value="YouTube">YouTube</SelectItem>
+                <SelectItem value="LinkedIn">LinkedIn</SelectItem>
+                <SelectItem value="Door Hanger">Door Hanger</SelectItem>
+                <SelectItem value="Yard Sign">Yard Sign</SelectItem>
+                <SelectItem value="Referral">Referral</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      
+      {showOtherSource && (
+        <FormField
+          control={form.control}
+          name="otherSource"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white/90">Please specify (Optional)</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="How did you hear about us?" 
+                  className="bg-navy-200 border border-white/10 rounded-lg focus:outline-none focus:border-gold" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
       
       <FormField
         control={form.control}

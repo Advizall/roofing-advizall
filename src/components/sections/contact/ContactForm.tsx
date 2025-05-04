@@ -21,6 +21,12 @@ export const ContactForm = () => {
       name: "",
       email: "",
       phone: "",
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      referralSource: "",
+      otherSource: "",
       message: ""
     }
   });
@@ -37,6 +43,12 @@ export const ContactForm = () => {
         name: values.name,
         email: values.email,
         phone: values.phone,
+        address: values.address || null,
+        city: values.city || null,
+        state: values.state || null,
+        zip_code: values.zipCode || null,
+        referral_source: values.referralSource || null,
+        other_source: values.otherSource || null,
         message: values.message,
         checkbox: smsConsent
       });

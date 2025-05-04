@@ -38,6 +38,15 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      
+      {/* Add custom styles for select dropdown */}
+      <style jsx global>{`
+        .select-content {
+          --background: #122F56;
+          --foreground: #fff;
+          --border: rgba(255, 255, 255, 0.1);
+        }
+      `}</style>
     </section>
   );
 };

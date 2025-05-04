@@ -202,34 +202,31 @@ export type Database = {
       }
       profiles: {
         Row: {
-          avatar_url: string | null
           created_at: string | null
           email: string | null
           full_name: string | null
           id: string
+          phone: string | null
           role: string | null
           updated_at: string | null
-          username: string | null
         }
         Insert: {
-          avatar_url?: string | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
           id: string
+          phone?: string | null
           role?: string | null
           updated_at?: string | null
-          username?: string | null
         }
         Update: {
-          avatar_url?: string | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
+          phone?: string | null
           role?: string | null
           updated_at?: string | null
-          username?: string | null
         }
         Relationships: []
       }
@@ -298,6 +295,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_admin_by_id: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
       is_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
