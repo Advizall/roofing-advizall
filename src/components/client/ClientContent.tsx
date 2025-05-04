@@ -33,7 +33,7 @@ const ClientContent: React.FC<ClientContentProps> = ({ activeSection }) => {
           
         if (data) {
           setProfile(data);
-          setClientName(data.full_name || data.username || '');
+          setClientName(data.full_name || data.email || '');
         }
       }
     };

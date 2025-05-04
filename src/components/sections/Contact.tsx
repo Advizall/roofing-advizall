@@ -40,7 +40,7 @@ const Contact = () => {
       </div>
       
       {/* Add custom styles for select dropdown */}
-      <style jsx global>{`
+      <style>{`
         .select-content {
           --background: #122F56;
           --foreground: #fff;
