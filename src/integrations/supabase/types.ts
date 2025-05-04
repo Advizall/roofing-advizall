@@ -148,34 +148,52 @@ export type Database = {
       }
       contact_submissions: {
         Row: {
+          address: string | null
           checkbox: boolean | null
+          city: string | null
           contacted: boolean | null
           created_at: string
           email: string
           id: string
           message: string
           name: string
+          other_source: string | null
           phone: string
+          referral_source: string | null
+          state: string | null
+          zip_code: string | null
         }
         Insert: {
+          address?: string | null
           checkbox?: boolean | null
+          city?: string | null
           contacted?: boolean | null
           created_at?: string
           email: string
           id?: string
           message: string
           name: string
+          other_source?: string | null
           phone: string
+          referral_source?: string | null
+          state?: string | null
+          zip_code?: string | null
         }
         Update: {
+          address?: string | null
           checkbox?: boolean | null
+          city?: string | null
           contacted?: boolean | null
           created_at?: string
           email?: string
           id?: string
           message?: string
           name?: string
+          other_source?: string | null
           phone?: string
+          referral_source?: string | null
+          state?: string | null
+          zip_code?: string | null
         }
         Relationships: []
       }

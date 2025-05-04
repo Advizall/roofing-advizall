@@ -36,6 +36,54 @@ serve(async (req) => {
       p_default_value: "false"
     });
 
+    // Add address column if it doesn't exist
+    await supabaseClient.rpc("add_column_if_not_exists", {
+      p_table_name: "contact_submissions",
+      p_column_name: "address",
+      p_data_type: "text",
+      p_default_value: "null"
+    });
+
+    // Add city column if it doesn't exist
+    await supabaseClient.rpc("add_column_if_not_exists", {
+      p_table_name: "contact_submissions",
+      p_column_name: "city",
+      p_data_type: "text",
+      p_default_value: "null"
+    });
+
+    // Add state column if it doesn't exist
+    await supabaseClient.rpc("add_column_if_not_exists", {
+      p_table_name: "contact_submissions",
+      p_column_name: "state",
+      p_data_type: "text",
+      p_default_value: "null"
+    });
+
+    // Add zip_code column if it doesn't exist
+    await supabaseClient.rpc("add_column_if_not_exists", {
+      p_table_name: "contact_submissions",
+      p_column_name: "zip_code",
+      p_data_type: "text",
+      p_default_value: "null"
+    });
+
+    // Add referral_source column if it doesn't exist
+    await supabaseClient.rpc("add_column_if_not_exists", {
+      p_table_name: "contact_submissions",
+      p_column_name: "referral_source",
+      p_data_type: "text",
+      p_default_value: "null"
+    });
+
+    // Add other_source column if it doesn't exist
+    await supabaseClient.rpc("add_column_if_not_exists", {
+      p_table_name: "contact_submissions",
+      p_column_name: "other_source",
+      p_data_type: "text",
+      p_default_value: "null"
+    });
+
     return new Response(
       JSON.stringify({
         success: true,

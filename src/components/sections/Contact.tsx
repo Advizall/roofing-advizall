@@ -40,13 +40,15 @@ const Contact = () => {
       </div>
       
       {/* Add custom styles for select dropdown */}
-      <style>{`
+      <style>
+        {`
         .select-content {
           --background: #122F56;
           --foreground: #fff;
           --border: rgba(255, 255, 255, 0.1);
         }
-      `}</style>
+      `}
+      </style>
     </section>
   );
 };
