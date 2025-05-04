@@ -120,7 +120,7 @@ export const FormFields = ({ form, handlePhoneChange, smsConsent, setSmsConsent 
           name="city"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-white/90">City (Optional)</FormLabel>
+              <FormLabel className="text-white/90">City</FormLabel>
               <FormControl>
                 <Input 
                   placeholder="Chicago" 
@@ -138,7 +138,7 @@ export const FormFields = ({ form, handlePhoneChange, smsConsent, setSmsConsent 
           name="state"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-white/90">State (Optional)</FormLabel>
+              <FormLabel className="text-white/90">State</FormLabel>
               <FormControl>
                 <Input 
                   placeholder="Illinois" 
@@ -156,7 +156,7 @@ export const FormFields = ({ form, handlePhoneChange, smsConsent, setSmsConsent 
           name="zipCode"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-white/90">Zip Code (Optional)</FormLabel>
+              <FormLabel className="text-white/90">Zip Code</FormLabel>
               <FormControl>
                 <Input 
                   placeholder="60513" 
