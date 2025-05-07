@@ -1,60 +1,59 @@
-
 import { Shield, Users, Heart, Award, Lightbulb, Compass } from 'lucide-react';
 
 const About = () => {
   const milestones = [
     {
-      year: '2015',
+      year: '2004',
       title: 'Founded',
-      description: 'PACC Solutions LLC was established with a mission to help homeowners navigate storm damage recovery.'
+      description: 'The Dirty Roofer was established as a family-owned business serving the New England area.'
     },
     {
-      year: '2018',
-      title: 'Regional Expansion',
-      description: 'Expanded services to cover the entire Midwest region, helping hundreds of families.'
+      year: '2010',
+      title: 'Service Expansion',
+      description: 'Expanded services to include custom copper work and slate roofing throughout Boston and surrounding areas.'
     },
     {
-      year: '2020',
-      title: 'Industry Recognition',
-      description: 'Received "Excellence in Customer Service" award from the National Restoration Association.'
+      year: '2015',
+      title: 'Certification Achievement',
+      description: 'Received Master Shingle Applicator certification from CertainTeed Corporation and EPDM certification.'
     },
     {
-      year: '2023',
-      title: 'Technology Integration',
-      description: 'Implemented advanced digital inspection tools and customer communication platforms.'
+      year: '2021',
+      title: 'Boston Copperworks',
+      description: 'Launched specialized subsidiary Boston Copperworks offering "Custom Copperwork at its Finest".'
     }
   ];
 
   const values = [
     {
       icon: <Shield className="h-12 w-12 text-gold" />,
-      title: 'Loyalty',
-      description: 'We stand steadfast in our commitment to our values, our mission, the promises made and our team. We are stronger together.'
+      title: 'Craftsmanship',
+      description: 'We take pride in our work and deliver the highest quality craftsmanship on every project, from small repairs to custom copper installations.'
     },
     {
       icon: <Heart className="h-12 w-12 text-gold" />,
       title: 'Family',
-      description: 'We believe that family is the cornerstone of a thriving society, serving as a foundation where values are taught and nurtured. Our conviction is that good humans build strong families, creating a ripple effect of positivity and strength that uplifts communities. We want to develop good humans.'
+      description: 'As a family-owned business, we treat every customer like family, providing personalized service and attention to detail that larger companies cannot match.'
     },
     {
       icon: <Award className="h-12 w-12 text-gold" />,
-      title: 'Trust',
-      description: 'It takes time to build and seconds to lose. We trust the process, and we trust each other to be honest and transparent in action and communication. We want to build a legacy on trust.'
+      title: 'Quality',
+      description: 'We use only the finest materials and time-tested techniques to ensure every roof we install or repair stands the test of time and weather.'
     },
     {
       icon: <Compass className="h-12 w-12 text-gold" />,
-      title: 'Discipline',
-      description: 'We do the things we don\'t want to do but need to do consistently over time. Discipline is the bridge between dreams and accomplishments. We do the hard work.'
+      title: 'Reliability',
+      description: 'When we make a commitment, we stand by it. Our customers know they can count on us to show up on time and complete projects as promised.'
     },
     {
       icon: <Lightbulb className="h-12 w-12 text-gold" />,
-      title: 'Adaptability',
-      description: 'It takes change to achieve big goals and adaptability to thrive in a changing environment. It\'s not the strongest, or the most intelligent that survives, but the one that has the ability to adapt.'
+      title: 'Expertise',
+      description: 'With nearly two decades of experience in diverse roofing applications, we have the specialized knowledge to tackle any roofing challenge effectively.'
     },
     {
       icon: <Users className="h-12 w-12 text-gold" />,
-      title: 'Empowerment',
-      description: 'We believe that each person is a powerhouse of potential to make a difference in their part of the world, and that difference starts with themselves. We equip our team to be bold, confident, and unashamed to live big. We aren\'t afraid to fail, we are afraid to live small.'
+      title: 'Community',
+      description: 'We\'ve built our reputation in the New England community through word of mouth and relationships that span generations of satisfied customers.'
     }
   ];
 
@@ -63,10 +62,10 @@ const About = () => {
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 reveal">
-            About <span className="gold-gradient">PACC Solutions</span>
+            About <span className="gold-gradient">The Dirty Roofer</span>
           </h2>
           <p className="text-lg max-w-3xl mx-auto text-white/80 reveal" style={{ animationDelay: '0.2s' }}>
-            <span className="font-semibold gold-gradient">Built to last</span> - Helping people rebuild after storms with honesty, professionalism, and experience.
+            <span className="font-semibold gold-gradient">Built to last</span> - A collection of the most talented roofing specialists serving residential and commercial projects in New England.
           </p>
         </div>
 
@@ -78,7 +77,7 @@ const About = () => {
             </div>
             <h3 className="text-2xl font-semibold mb-4 gold-gradient">Vision</h3>
             <p className="text-white/80 leading-relaxed">
-              To enrich lives and create lasting impacts.
+              To be the most trusted name in roofing across New England.
             </p>
           </div>
 
@@ -88,7 +87,7 @@ const About = () => {
             </div>
             <h3 className="text-2xl font-semibold mb-4 gold-gradient">Mission</h3>
             <p className="text-white/80 leading-relaxed">
-              We empower our team to grow professionally and personally, while focusing on redefining the customer experience, building relationships that last.
+              Providing exceptional roofing services with unmatched craftsmanship, ensuring every project meets our high standards.
             </p>
           </div>
 
@@ -96,9 +95,9 @@ const About = () => {
             <div className="mb-4 p-4 rounded-full bg-gold/10">
               <Award className="h-10 w-10 text-gold" />
             </div>
-            <h3 className="text-2xl font-semibold mb-4 gold-gradient">Our Niche</h3>
+            <h3 className="text-2xl font-semibold mb-4 gold-gradient">Our Specialty</h3>
             <p className="text-white/80 leading-relaxed">
-              Delivering a frictionless experience in the property service industry.
+              Custom copper work and expert installation of slate, rubber, and asphalt roofing systems.
             </p>
           </div>
         </div>

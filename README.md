@@ -1,6 +1,6 @@
-# PACC Solutions LLC - HomeGuardian
+# The Dirty Roofer - Website
 
-A modern web application for PACC Solutions LLC, providing home security and surveillance solutions.
+A modern web application for The Dirty Roofer, providing expert roofing services in Boston and New England.
 
 ## Getting Started
 
@@ -13,8 +13,8 @@ A modern web application for PACC Solutions LLC, providing home security and sur
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/pacc-homeguardian.git
-   cd pacc-homeguardian
+   git clone https://github.com/yourusername/dirty-roofer.git
+   cd dirty-roofer
    ```
 
 2. Install dependencies:

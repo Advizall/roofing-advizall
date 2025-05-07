@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle2, Circle, Clock } from 'lucide-react';
@@ -34,7 +33,7 @@ const ProcessSection: React.FC = () => {
       <div>
         <h1 className="text-2xl font-bold text-white mb-1">Project Status</h1>
         <p className="text-white/70">
-          Track the progress of your project with PACC Solutions
+          Track the progress of your project with The Dirty Roofer
         </p>
       </div>
       

@@ -29,7 +29,7 @@ const Navbar = () => {
             <Link to="/" className="flex items-center">
               <img 
                 src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" 
-                alt="PACC Solutions LLC" 
+                alt="The Dirty Roofer" 
                 style={{ height: "76.8px" }} 
                 className="h-[100.8px]" 
               />
@@ -77,7 +77,7 @@ const Navbar = () => {
           <a href="#hero" className="flex items-center">
             <img 
               src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" 
-              alt="PACC Solutions LLC" 
+              alt="The Dirty Roofer" 
               style={{ height: "76.8px" }} 
               className="h-[100.8px]" 
             />

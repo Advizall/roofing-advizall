@@ -9,7 +9,7 @@ export const SuccessMessage = () => {
         Your information has been successfully submitted.
       </p>
       <p className="text-white/80 text-center">
-        Our team will contact you shortly to schedule your free inspection.
+        Our team will contact you shortly to provide a free estimate for your roofing project.
       </p>
     </div>
   );

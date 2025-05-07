@@ -1,4 +1,3 @@
-
 import {
   Dialog,
   DialogContent,
@@ -14,7 +13,7 @@ export const SMSTermsDialog = () => {
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-center mb-4">
-            PACC SOLUTIONS LLC / PACC BUILDING GROUP
+            THE DIRTY ROOFER
             <br />
             SMS Terms of Service
           </DialogTitle>
@@ -22,19 +21,19 @@ export const SMSTermsDialog = () => {
         
         <div className="space-y-6 text-sm">
           <div className="text-center text-gray-400">
-            <p>Address: 9150 Broadway Ave, Brookfield, IL 60513</p>
-            <p>Phone: 877-350-1690 (Toll-Free)</p>
-            <p>Email: contact@paccsolutions.com</p>
+            <p>Address: 85 Willow Court, Boston, MA 02196</p>
+            <p>Phone: 1-617-233-8489</p>
+            <p>Email: roofereamon@gmail.com</p>
           </div>
 
           <div>
             <h3 className="font-semibold mb-2">1. SMS Consent Communication</h3>
-            <p>Phone numbers collected through our SMS consent process will not be shared with third parties for marketing purposes. Your information is used exclusively for communication between you and PACC Solutions LLC / PACC Building Group.</p>
+            <p>Phone numbers collected through our SMS consent process will not be shared with third parties for marketing purposes. Your information is used exclusively for communication between you and The Dirty Roofer.</p>
           </div>
 
           <div>
             <h3 className="font-semibold mb-2">2. Types of SMS Communications</h3>
-            <p>If you have consented to receive SMS messages from PACC Solutions LLC / PACC Building Group, you may receive messages related to:</p>
+            <p>If you have consented to receive SMS messages from The Dirty Roofer, you may receive messages related to:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
               <li>Appointment reminders</li>
               <li>Project updates or follow-ups</li>
@@ -66,12 +65,12 @@ export const SMSTermsDialog = () => {
 
           <div>
             <h3 className="font-semibold mb-2">6. Opt-Out Method</h3>
-            <p>You can opt out of receiving SMS messages at any time by replying "STOP" to any message. You may also contact us directly at 877-350-1690 or contact@paccsolutions.com to be removed from our SMS list.</p>
+            <p>You can opt out of receiving SMS messages at any time by replying "STOP" to any message. You may also contact us directly at 1-617-233-8489 or roofereamon@gmail.com to be removed from our SMS list.</p>
           </div>
 
           <div>
             <h3 className="font-semibold mb-2">7. Help</h3>
-            <p>If you need assistance, reply with the keyword "HELP" to any message or contact us directly at contact@paccsolutions.com.</p>
+            <p>If you need assistance, reply with the keyword "HELP" to any message or contact us directly at roofereamon@gmail.com.</p>
           </div>
 
           <div>

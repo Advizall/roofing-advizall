@@ -18,14 +18,14 @@ const Hero = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="reveal">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
-              <span className="block">Protecting Your Home.</span>
-              <span className="gold-gradient">Guiding Your Claims.</span>
+              <span className="block">The Dirty Roofer.</span>
+              <span className="gold-gradient">Serving Boston and surrounding communities</span>
             </h1>
           </div>
           
           <div className="reveal" style={{ animationDelay: '0.2s' }}>
             <p className="text-xl md:text-2xl mb-10 text-white/90 leading-relaxed drop-shadow-md">
-              PACC Solutions LLC offers expert support for homeowners facing storm damage – from inspection to insurance negotiation and full restoration.
+              The Dirty Roofer is a family-owned business with almost 20 years of experience in New England, offering expert residential and commercial roofing services.
             </p>
           </div>
           
@@ -34,7 +34,7 @@ const Hero = () => {
               href="#contact" 
               className="btn-primary text-lg inline-flex items-center shadow-lg hover:shadow-xl transition-all"
             >
-              Get a Free Inspection
+              Get a Free Estimate
               <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
               </svg>

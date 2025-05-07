@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface WelcomeHeaderProps {
@@ -12,7 +11,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ clientName }) => {
         Welcome back, {clientName || 'Client'}
       </h1>
       <p className="text-white/70">
-        Here's an overview of your project with PACC Solutions
+        Here's an overview of your project with The Dirty Roofer
       </p>
     </div>
   );

@@ -75,7 +75,7 @@ export const ContactForm = () => {
             className="btn-primary w-full text-center" 
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Submitting...' : 'Get a Free Inspection'}
+            {isSubmitting ? 'Submitting...' : 'Get a Free Estimate'}
           </button>
         </div>
       </form>

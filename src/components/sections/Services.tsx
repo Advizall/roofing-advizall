@@ -1,38 +1,37 @@
-
 import ServiceCard from '../ui/ServiceCard';
-import { Clipboard, FileText, Home, Building, Phone, Sun } from 'lucide-react';
+import { FileText, Home, Building, Hammer, Droplet, Wrench } from 'lucide-react';
 
 const Services = () => {
   const servicesList = [
     {
-      icon: Clipboard,
-      title: "Insurance Claim Management",
-      description: "We handle the entire insurance claim process from documentation to final settlement negotiation."
+      icon: Home,
+      title: "Copper Roofing",
+      description: "Custom copper roofing, siding, bays, cornices, specialty trim and standing seam panels crafted with precision."
     },
     {
       icon: FileText,
-      title: "Damage Assessment",
-      description: "Professional evaluation of storm damage to determine the full extent of repairs needed for your insurance claim."
+      title: "Slate Roofing",
+      description: "Expert installation and repair of traditional slate roofing, providing timeless beauty and exceptional durability."
     },
     {
-      icon: Home,
-      title: "Roof Repair & Replacement",
-      description: "Expert installation of high-quality roofing systems with industry-leading warranties and superior craftsmanship."
+      icon: Droplet,
+      title: "Rubber Roofing",
+      description: "EPDM rubber roofing systems with certified application from Johns Manville & GenFlex for commercial and residential projects."
     },
     {
       icon: Building,
-      title: "Window and Siding Restoration",
-      description: "Complete repair or replacement of damaged windows and siding to protect your home's integrity and appearance."
+      title: "Asphalt Shingle Roofing",
+      description: "Master Shingle Applicator certified installation of high-quality asphalt shingles with manufacturer warranties."
     },
     {
-      icon: Phone,
-      title: "24/7 Emergency Response",
-      description: "Immediate assistance following storm damage, including temporary repairs to prevent further damage to your property."
+      icon: Hammer,
+      title: "Masonry & Hardscape",
+      description: "Pointing, stone walls, patios, steps, fireplaces, BBQ pits, walkways and stonewalls crafted with expert precision."
     },
     {
-      icon: Sun,
-      title: "Solar Panel Solutions",
-      description: "Specialized installation and repair of solar panel systems on new or existing roofs, maximizing energy efficiency for your home."
+      icon: Wrench,
+      title: "Gutters & Maintenance",
+      description: "Custom OG and Half-Moon gutters, downspouts, cleaning services, and comprehensive roof inspections and waterproofing."
     }
   ];
 
@@ -44,7 +43,7 @@ const Services = () => {
             Our <span className="gold-gradient">Services</span>
           </h2>
           <p className="text-lg max-w-3xl mx-auto text-white/80 reveal" style={{ animationDelay: '0.2s' }}>
-            Comprehensive solutions for homeowners dealing with storm damage and insurance claims.
+            Comprehensive roofing solutions for residential and commercial properties across New England.
           </p>
         </div>
         

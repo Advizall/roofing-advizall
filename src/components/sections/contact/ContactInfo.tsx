@@ -1,4 +1,3 @@
-
 import { MapPin, Phone, Mail } from 'lucide-react';
 
 export const ContactInfo = () => {
@@ -13,7 +12,7 @@ export const ContactInfo = () => {
           <MapPin className="h-6 w-6 text-gold mt-1 mr-4" />
           <div>
             <h4 className="font-medium mb-1">Address</h4>
-            <p className="text-white/80">9150 Broadway Ave, Brookfield, IL 60513</p>
+            <p className="text-white/80">85 Willow Court, Boston, MA 02196</p>
           </div>
         </div>
         
@@ -21,7 +20,7 @@ export const ContactInfo = () => {
           <Phone className="h-6 w-6 text-gold mt-1 mr-4" />
           <div>
             <h4 className="font-medium mb-1">Phone</h4>
-            <p className="text-white/80">(877) 350-1690</p>
+            <p className="text-white/80">1-617-233-8489 (ask for Brendan)</p>
           </div>
         </div>
         
@@ -29,7 +28,7 @@ export const ContactInfo = () => {
           <Mail className="h-6 w-6 text-gold mt-1 mr-4" />
           <div>
             <h4 className="font-medium mb-1">Email</h4>
-            <p className="text-white/80">contact@paccsolutions.com</p>
+            <p className="text-white/80">roofereamon@gmail.com</p>
           </div>
         </div>
         
@@ -42,8 +41,9 @@ export const ContactInfo = () => {
           </div>
           <div>
             <h4 className="font-medium mb-1">Business Hours</h4>
-            <p className="text-white/80">Mon-Fri: 9:00 AM - 5:00 PM</p>
-            <p className="text-white/80">Sat-Sun: Closed (Emergency services available)</p>
+            <p className="text-white/80">Mon-Fri: 8:00 AM - 6:00 PM</p>
+            <p className="text-white/80">Sat: 9:00 AM - 2:00 PM</p>
+            <p className="text-white/80">Sun: Closed</p>
           </div>
         </div>
       </div>

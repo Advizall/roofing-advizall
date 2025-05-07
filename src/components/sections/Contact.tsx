@@ -1,4 +1,3 @@
-
 import { ContactForm } from './contact/ContactForm';
 import { ContactInfo } from './contact/ContactInfo';
 import { ServiceAreas } from './contact/ServiceAreas';
@@ -20,7 +19,7 @@ const Contact = () => {
           <p className="text-lg max-w-3xl mx-auto text-white/80 reveal" style={{
             animationDelay: '0.2s'
           }}>
-            Ready to start your recovery? Reach out for a free inspection and consultation.
+            Ready for quality roofing service? Reach out for a free estimate on your project.
           </p>
         </div>
 

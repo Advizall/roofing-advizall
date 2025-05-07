@@ -62,7 +62,7 @@ const ClientNavbar = () => {
       <nav className="bg-navy-200 border-b border-gold/20 py-4 px-6 fixed top-0 left-0 right-0 z-50">
         <div className="flex items-center">
           <Link to="/">
-            <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions" className="h-16" />
+            <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="The Dirty Roofer" className="h-16" />
           </Link>
         </div>
       </nav>
@@ -74,7 +74,7 @@ const ClientNavbar = () => {
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <Link to="/">
-            <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="PACC Solutions" className="h-16" />
+            <img src="/images/4811a69a-c3ba-4318-bb8c-d90d22539145.png" alt="The Dirty Roofer" className="h-16" />
           </Link>
           <span className="text-gold ml-4 font-semibold hidden md:inline-block">
             Dashboard

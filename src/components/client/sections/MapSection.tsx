@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MapPin, Home, CheckCircle2 } from 'lucide-react';
@@ -137,7 +136,7 @@ const MapSection: React.FC<MapSectionProps> = ({ profile }) => {
                 )}
               </div>
               <div className="mt-4 text-sm text-white/60">
-                <p>Map shows completed PACC projects in your area. Click on markers to see project details.</p>
+                <p>Map shows completed The Dirty Roofer projects in your area. Click on markers to see project details.</p>
               </div>
             </CardContent>
           </Card>

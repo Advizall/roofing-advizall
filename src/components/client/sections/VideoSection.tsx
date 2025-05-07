@@ -25,7 +25,7 @@ const VideoSection: React.FC = () => {
             <CardContent>
               <VideoPlayer 
                 url="https://www.youtube.com/watch?v=0V11iemMsB8" 
-                title="PACC Solutions Process Explanation"
+                title="The Dirty Roofer Process Explanation"
                 className="aspect-video rounded-md overflow-hidden shadow-gold"
               />
             </CardContent>

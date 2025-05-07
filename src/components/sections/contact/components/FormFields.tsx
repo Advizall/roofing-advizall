@@ -1,4 +1,3 @@
-
 import {
   FormControl,
   FormField,
@@ -249,7 +248,7 @@ export const FormFields = ({ form, handlePhoneChange, smsConsent, setSmsConsent 
           htmlFor="sms-consent"
           className="text-sm text-white/80 leading-tight"
         >
-          By checking this box, you agree to receive conversational text messages from PACC Solutions LLC / PACC Building Group. You may reply STOP to opt out at any time. Reply HELP for assistance. Message and data rates may apply. Messaging frequency will vary. <SMSTermsDialog />
+          By checking this box, you agree to receive conversational text messages from The Dirty Roofer. You may reply STOP to opt out at any time. Reply HELP for assistance. Message and data rates may apply. Messaging frequency will vary. <SMSTermsDialog />
         </label>
       </div>
     </>
