@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, LogIn } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
@@ -94,21 +94,11 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <Link 
-              to="/login" 
-              className="nav-link ml-4 flex items-center gap-2 bg-gold/10 hover:bg-gold/20 px-4 py-2 rounded-md text-gold transition-all duration-300 group whitespace-nowrap"
-            >
-              <LogIn 
-                size={16} 
-                className="transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110"
-              />
-              Login
-            </Link>
             <a 
               href="#contact" 
               className="btn-primary w-[160px] text-center py-2 whitespace-nowrap"
             >
-              Free Inspection
+              Free Estimate
             </a>
           </nav>
           
@@ -141,23 +131,12 @@ const Navbar = () => {
                   {link.name}
                 </a>
               ))}
-              <Link 
-                to="/login" 
-                className="text-gold hover:bg-gold/10 py-2 text-lg font-medium transition-colors text-center flex items-center justify-center gap-2 rounded-md" 
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <LogIn 
-                  size={18} 
-                  className="transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110"
-                />
-                Login
-              </Link>
               <a 
                 href="#contact" 
                 className="btn-primary text-center py-2 w-[160px] mx-auto" 
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Free Inspection
+                Free Estimate
               </a>
             </nav>
           </div>
