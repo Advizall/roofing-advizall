@@ -7,7 +7,7 @@ const Hero = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-navy-500/70 z-10"></div>
         <img 
-          src="/images/6cec3c84-d369-4d4c-b995-ee519e7d2c9a.png" 
+          src="/images/types-of-roofing-section-2.jpg.avif" 
           alt="American home with stylish roof" 
           className="w-full h-full object-cover object-center"
         />
