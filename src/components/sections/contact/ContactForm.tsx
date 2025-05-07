@@ -1,6 +1,4 @@
-
 import { useState } from 'react';
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,45 +36,23 @@ export const ContactForm = () => {
 
   const onSubmit = async (values: ContactFormData) => {
     setIsSubmitting(true);
-    try {
-      const { error } = await supabase.from('contact_submissions').insert({
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        address: values.address || null,
-        city: values.city || null,
-        state: values.state || null,
-        zip_code: values.zipCode || null,
-        referral_source: values.referralSource || null,
-        other_source: values.otherSource || null,
-        message: values.message,
-        checkbox: smsConsent
-      });
-
-      if (error) {
-        console.error('Error submitting form:', error);
-        toast({
-          title: "Submission Failed",
-          description: "There was an error submitting your message. Please try again.",
-          variant: "destructive"
-        });
-      } else {
-        console.log('Form submitted successfully');
-        setSubmitted(true);
-        form.reset();
-        setSmsConsent(false);
-        setTimeout(() => setSubmitted(false), 5000);
-      }
-    } catch (error) {
-      console.error('Exception when submitting form:', error);
-      toast({
-        title: "Submission Error",
-        description: "An unexpected error occurred. Please try again later.",
-        variant: "destructive"
-      });
-    } finally {
+    
+    // Simulate processing delay
+    setTimeout(() => {
+      console.log('Form data:', values);
+      
+      // Show success message
+      setSubmitted(true);
+      
+      // Reset form
+      form.reset();
+      setSmsConsent(false);
+      
+      // Reset after 5 seconds
+      setTimeout(() => setSubmitted(false), 5000);
+      
       setIsSubmitting(false);
-    }
+    }, 1000);
   };
 
   if (submitted) {
